@@ -1,0 +1,8 @@
+{
+  "name": "HealUp_0",
+  "description": "A holistic digital health platform for autoimmune disease management, featuring symptom tracking, AI-driven insights, and expert connection.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
