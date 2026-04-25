@@ -275,7 +275,7 @@ const App: React.FC = () => {
                   Research & News
                 </button>
                 <a
-                  href="mailto:care@healup.app?subject=HealUp%20Support"
+                  href="mailto:admin@healup-health.com?subject=HealUp%20Support"
                   className="inline-flex min-h-[44px] items-center rounded-2xl border border-matcha-100 bg-[#fffdf9] px-4 py-2 text-sm font-semibold text-matcha-800 transition-colors hover:bg-matcha-50"
                 >
                   Contact
