@@ -45,6 +45,11 @@ const readJson = <T,>(key: string): T | null => { try { const raw = window.local
 const makeId = (prefix: string, label: string) => `${prefix}-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now()}`;
 const badge = (text?: string) => text ? <span className="rounded-full bg-matcha-100 px-2 py-1 text-[11px] font-semibold text-matcha-800">{text}</span> : null;
 const formatMetricMax = (max: number, unit?: string) => `Max ${max}${unit ? ` ${unit}` : ''}`;
+const isLegacyDefaultSymptoms = (items: TrackedSymptomDefinition[]) => items.length === CORE_IDS.length && items.every((item) => CORE_IDS.includes(item.id) && item.source === 'suggested');
+const isLegacyDefaultMetrics = (items: TrackedQuantifiableMetricDefinition[]) => {
+  const defaultMetricIds = ['sleepHours', 'stressLevel', 'waterIntake'];
+  return items.length === defaultMetricIds.length && items.every((item) => defaultMetricIds.includes(item.id) && item.source === 'suggested');
+};
 
 const fromRecordSymptoms = (record?: DailyRecord) => {
   if (!record) return [] as TrackedSymptomDefinition[];
@@ -73,11 +78,11 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
   const latestManaged = useMemo(() => [...existingData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).find((record) => record.trackedSymptoms?.length || record.trackedQuantifiableMetrics?.length || record.symptomEntries?.length || record.quantifiableEntries?.length || record.additionalSymptoms?.length), [existingData]);
   const defaultSymptoms = useMemo(() => {
     const stored = typeof window !== 'undefined' ? readJson<TrackedSymptomDefinition[]>(SYMPTOM_KEY) : null;
-    return stored?.length ? stored : mergeById(SUGGESTED_SYMPTOMS.filter((item) => CORE_IDS.includes(item.id)), fromRecordSymptoms(latestManaged));
+    return stored?.length && !isLegacyDefaultSymptoms(stored) ? stored : fromRecordSymptoms(latestManaged);
   }, [latestManaged]);
   const defaultMetrics = useMemo(() => {
     const stored = typeof window !== 'undefined' ? readJson<TrackedQuantifiableMetricDefinition[]>(METRIC_KEY) : null;
-    return stored?.length ? stored : mergeById(SUGGESTED_METRICS.filter((item) => ['sleepHours', 'stressLevel', 'waterIntake'].includes(item.id)), fromRecordMetrics(latestManaged));
+    return stored?.length && !isLegacyDefaultMetrics(stored) ? stored : fromRecordMetrics(latestManaged);
   }, [latestManaged]);
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);

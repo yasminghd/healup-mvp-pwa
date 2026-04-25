@@ -11,7 +11,7 @@ Status meanings:
 - `disabled-no-ui`: kept in code but not exposed in UI
 - `deleted`: permanently removed from code
 - `planned`: not implemented yet, tracked for future scope
-- `needs-review`: present but partial, mock-only, or unclear for MVP readiness
+- `needs-review`: present but partial, or unclear for MVP readiness
 
 ## Current Navigation
 
@@ -56,12 +56,12 @@ Mobile-first navigation:
 | AI Avatar Generation | None | `components/Profile.tsx`, `services/geminiService.ts` | `mvp-active` | Yes | visible | Generates avatar artwork while editing profile. |
 | Settings Core | Settings | `AppView.SETTINGS` / `components/Settings.tsx` | `mvp-active` | Yes | visible | Language, privacy, rest mode, dark mode, text size, and reduced motion preferences are wired to state, with added privacy-first trust messaging. |
 | Appearance Theme Toggle | Dark Mode | `components/Settings.tsx`, `App.tsx`, `index.html` | `mvp-active` | Yes | visible | Dark mode is now wired to app state and persisted locally on the device. |
-| Settings Mock Actions | Notifications, Appearance, Support | `components/Settings.tsx` | `needs-review` | No | visible | Notifications, text size, support links, and sign-out are still mostly mock or no-op. |
+| Settings Review Actions | Notifications, Appearance, Support | `components/Settings.tsx` | `needs-review` | No | visible | Notifications, text size, support links, and sign-out need production review. |
 | HealUp Assistant | HealUp Assistant | `AppView.CHAT` / `components/AiAssistant.tsx` | `hidden-kept-for-later` | No | hidden | AI chat assistant still implemented but hidden for MVP focus. |
-| Community Messaging | Messages | `AppView.COMMUNITY` / `components/Community.tsx` | `hidden-kept-for-later` | No | hidden | Friend chat UI with translation flow; mostly mock conversations. |
+| Community Messaging | Messages | `AppView.COMMUNITY` / `components/Community.tsx` | `hidden-kept-for-later` | No | hidden | Friend chat UI with empty contact and conversation states. |
 | Discover | Discover | `AppView.DISCOVER` / `components/Discover.tsx` | `hidden-kept-for-later` | No | hidden | Includes people matching and discoverable groups tabs. |
-| Groups | Groups | `AppView.GROUPS` / `components/Groups.tsx` | `hidden-kept-for-later` | No | hidden | Group browsing and create-group UI using mock content. |
-| Events | Events | `AppView.EVENTS` / `components/Events.tsx` | `hidden-kept-for-later` | No | hidden | Event filters and registration toggles using mock content. |
+| Groups | Groups | `AppView.GROUPS` / `components/Groups.tsx` | `hidden-kept-for-later` | No | hidden | Group browsing and create-group UI with empty live-data-ready states. |
+| Events | Events | `AppView.EVENTS` / `components/Events.tsx` | `hidden-kept-for-later` | No | hidden | Event filters and registration toggles with empty live-data-ready states. |
 | Expert Portal | Expert Portal | `AppView.EXPERTS` / `components/Experts.tsx` | `hidden-kept-for-later` | No | hidden | Provider directory and partner CTA remain preserved. |
 | Research Center | Research & News | `AppView.RESEARCH` / `components/Research.tsx` | `mvp-active` | Yes | visible | Journals, news, trials, and recruitment tabs are restored in HealUp Connect. |
 | Soundscapes & Breathing Support | None | Not yet implemented | `planned` | No | planned | Future scope may include soft soundscapes or guided breathing support if the product expands beyond the MVP. |
@@ -70,5 +70,6 @@ Mobile-first navigation:
 
 - There are no explicit feature deletions tracked in the current codebase.
 - Hidden features are currently controlled by `config/features.ts` and guarded in `App.tsx` and `components/Sidebar.tsx`.
-- Several preserved future features are mock-data driven and should be reviewed before reactivation.
+- Several preserved future features now use empty states and should be reviewed before reactivation.
 - If a feature is added, hidden, restored, disabled, removed, renamed, or moved, update this file and `config/features.ts` in the same task.
+

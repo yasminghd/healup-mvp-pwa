@@ -8,44 +8,7 @@ interface GroupsProps {
   language: string;
 }
 
-const MOCK_GROUPS: Group[] = [
-  {
-    id: '1',
-    name: 'Portland Warriors',
-    description: 'Local support group for autoimmune patients in the Greater Portland area.',
-    memberCount: 142,
-    role: 'Member',
-    imageUrl: 'https://picsum.photos/seed/pdxgroup/400/200',
-    lastActive: '2 hours ago'
-  },
-  {
-    id: '2',
-    name: 'Sjögren’s Nutrition Support',
-    description: 'Sharing recipes, tips, and dietary strategies for managing dry mouth and inflammation.',
-    memberCount: 3890,
-    role: 'Admin',
-    imageUrl: 'https://picsum.photos/seed/nutritiongroup/400/200',
-    lastActive: '5 mins ago'
-  },
-  {
-    id: '3',
-    name: 'Early Risers Yoga',
-    description: 'Morning gentle movement and meditation sessions via Zoom.',
-    memberCount: 56,
-    role: 'Member',
-    imageUrl: 'https://picsum.photos/seed/yogagroup/400/200',
-    lastActive: '1 day ago'
-  },
-  {
-    id: '4',
-    name: 'Chronic Pain & Art Therapy',
-    description: 'Expressing our journey through creative arts. Weekly themes.',
-    memberCount: 210,
-    role: 'Member',
-    imageUrl: 'https://picsum.photos/seed/artgroup/400/200',
-    lastActive: '3 hours ago'
-  }
-];
+const GROUPS: Group[] = [];
 
 const Groups: React.FC<GroupsProps> = ({ language }) => {
   return (
@@ -61,7 +24,7 @@ const Groups: React.FC<GroupsProps> = ({ language }) => {
       </header>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {MOCK_GROUPS.map((group) => (
+        {GROUPS.map((group) => (
           <div key={group.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-md transition-all">
             <div className="h-32 bg-gray-100 relative">
                <img src={group.imageUrl} alt={group.name} className="w-full h-full object-cover" />
@@ -95,7 +58,14 @@ const Groups: React.FC<GroupsProps> = ({ language }) => {
           </div>
         ))}
 
-        {/* Add New Placeholder */}
+        {GROUPS.length === 0 && (
+          <div className="md:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center text-gray-500">
+            <Users size={40} className="mx-auto mb-3 opacity-30" />
+            <p className="font-medium text-gray-700">No entries yet.</p>
+            <p className="mt-1 text-sm">Groups will appear here once live community data is received.</p>
+          </div>
+        )}
+
         <button className="border-2 border-dashed border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-4 hover:border-matcha-400 hover:bg-matcha-50/30 transition-all group">
            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-matcha-100 transition-colors">
              <Plus size={32} className="text-gray-400 group-hover:text-matcha-600" />
@@ -111,3 +81,4 @@ const Groups: React.FC<GroupsProps> = ({ language }) => {
 };
 
 export default Groups;
+

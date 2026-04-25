@@ -196,14 +196,20 @@ const Sidebar: React.FC<SidebarProps> = ({
               }}
               className="flex items-center gap-3 w-full hover:bg-matcha-100/50 p-2 rounded-lg transition-colors text-left group"
             >
-              <img 
-                src={userProfile.avatarUrl} 
-                alt="User" 
-                className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" 
-              />
+              {userProfile.avatarUrl ? (
+                <img
+                  src={userProfile.avatarUrl}
+                  alt="User"
+                  className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover"
+                />
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-matcha-100 text-sm font-bold text-matcha-800 shadow-sm">
+                  {(userProfile.name || 'U').charAt(0).toUpperCase()}
+                </div>
+              )}
               <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-semibold text-gray-800 group-hover:text-matcha-800 truncate">{userProfile.name}</p>
-                <p className="text-xs text-gray-500 truncate">{userProfile.condition}</p>
+                <p className="text-sm font-semibold text-gray-800 group-hover:text-matcha-800 truncate">{userProfile.name || 'Your profile'}</p>
+                <p className="text-xs text-gray-500 truncate">{userProfile.condition || 'No condition added'}</p>
               </div>
               <ChevronRight size={16} className="text-gray-400 group-hover:text-matcha-600" />
             </button>

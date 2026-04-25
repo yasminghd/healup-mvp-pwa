@@ -23,7 +23,6 @@ interface LabResultsProps {
   userProfile: UserProfile;
 }
 
-// Mock database of standard ranges
 const STANDARD_RANGES: Record<string, { min: number; max: number; unit: string; description: string }> = {
   'CRP (C-Reactive Protein)': { min: 0, max: 10, unit: 'mg/L', description: 'Marker for inflammation.' },
   'ESR (Sed Rate)': { min: 0, max: 20, unit: 'mm/hr', description: 'Inflammation marker. Higher in females.' },
@@ -193,7 +192,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
           </p>
           {currentRange && (
              <p className={`text-xs mt-1 ${isSafe ? 'text-green-600' : 'text-amber-600'}`}>
-                {isSafe ? 'Within Fellows\' Range' : 'Out of Fellows\' Range'}
+                {isSafe ? 'Within reference range' : 'Outside reference range'}
              </p>
           )}
         </div>
@@ -359,7 +358,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
               </h2>
               {currentRange && (
                 <p className="text-xs text-gray-500 mt-1">
-                   Fellow Patients' Range ({userProfile.gender || 'Standard'}): 
+                   Reference Range ({userProfile.gender || 'Standard'}): 
                    <span className="font-semibold text-matcha-700"> {currentRange.min} - {currentRange.max} {currentRange.unit}</span>
                 </p>
               )}
@@ -390,7 +389,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
                     <YAxis stroke="#9ca3af" tick={{fontSize: 12}} domain={['auto', 'auto']} />
                     <Tooltip content={<CustomTooltip />} />
                     
-                    {/* Fellow Patients' Range Area */}
+                    {/* Reference range area */}
                     {currentRange && (
                         <ReferenceArea 
                             y1={currentRange.min} 
@@ -398,7 +397,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
                             fill="#8ccc81" 
                             fillOpacity={0.15} 
                         >
-                            <Label value="Fellow Patients' Range" position="insideTopRight" fill="#66b059" fontSize={10} />
+                            <Label value="Reference Range" position="insideTopRight" fill="#66b059" fontSize={10} />
                         </ReferenceArea>
                     )}
                     
@@ -435,7 +434,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
                 </p>
                 
                 <div className="healup-card-soft rounded-[24px] p-5">
-                    <h4 className="text-xs font-bold text-matcha-800 mb-2 uppercase tracking-wide">Comparison Cohort</h4>
+                    <h4 className="text-xs font-bold text-matcha-800 mb-2 uppercase tracking-wide">Reference Context</h4>
                     <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Gender</span>
                         <span className="font-semibold text-gray-800">{userProfile.gender || 'Not specified'}</span>

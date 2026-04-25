@@ -28,75 +28,11 @@ const REDUCED_MOTION_STORAGE_KEY = 'healup-reduced-motion';
 const REST_MODE_STORAGE_KEY = 'healup-rest-mode';
 const ONBOARDING_STORAGE_KEY = 'healup-has-seen-onboarding';
 
-// Helper to get past dates
-const getPastDate = (daysAgo: number) => {
-  const d = new Date();
-  d.setDate(d.getDate() - daysAgo);
-  return d.toISOString().split('T')[0];
-};
+const INITIAL_DATA: DailyRecord[] = [];
 
-// Mock Data with ISO Dates
-const INITIAL_DATA: DailyRecord[] = [
-  { id: '1', date: getPastDate(6), fatigue: 2, dryEyes: 3, dryMouth: 2, jointPain: 1, sleepHours: 7.5, stressLevel: 2, waterIntake: 8, activityLevel: 'Moderate', notes: 'Feeling okay.' },
-  { id: '2', date: getPastDate(5), fatigue: 3, dryEyes: 4, dryMouth: 3, jointPain: 2, sleepHours: 6, stressLevel: 5, waterIntake: 5, activityLevel: 'Light', notes: 'Work was stressful.' },
-  { id: '3', date: getPastDate(4), fatigue: 5, dryEyes: 4, dryMouth: 3, jointPain: 4, sleepHours: 5.5, stressLevel: 8, waterIntake: 4, activityLevel: 'Sedentary', notes: 'Bad flare up.' },
-  { id: '4', date: getPastDate(3), fatigue: 3, dryEyes: 2, dryMouth: 2, jointPain: 2, sleepHours: 7, stressLevel: 4, waterIntake: 6, activityLevel: 'Moderate', notes: 'Recovering.' },
-  { id: '5', date: getPastDate(2), fatigue: 2, dryEyes: 2, dryMouth: 1, jointPain: 1, sleepHours: 8, stressLevel: 2, waterIntake: 9, activityLevel: 'Active', notes: 'Yoga helped.' },
-  { id: '6', date: getPastDate(1), fatigue: 1, dryEyes: 1, dryMouth: 1, jointPain: 0, sleepHours: 9, stressLevel: 1, waterIntake: 10, activityLevel: 'Active', notes: 'Great sleep.' },
-  { id: '7', date: getPastDate(0), fatigue: 2, dryEyes: 2, dryMouth: 1, jointPain: 1, sleepHours: 8, stressLevel: 2, waterIntake: 8, activityLevel: 'Light', notes: '' },
-];
+const INITIAL_LAB_DATA: LabResult[] = [];
 
-const INITIAL_LAB_DATA: LabResult[] = [
-  { id: '1', date: '2023-10-15', testName: 'CRP (C-Reactive Protein)', value: 8.5, unit: 'mg/L', category: 'Blood', notes: 'Slightly elevated' },
-  { id: '2', date: '2023-11-10', testName: 'CRP (C-Reactive Protein)', value: 6.2, unit: 'mg/L', category: 'Blood', notes: '' },
-  { id: '3', date: '2023-12-05', testName: 'CRP (C-Reactive Protein)', value: 4.1, unit: 'mg/L', category: 'Blood', notes: 'Improving' },
-  { id: '4', date: '2023-10-15', testName: 'Vitamin D', value: 28, unit: 'ng/mL', category: 'Blood', notes: 'Started supplement' },
-  { id: '5', date: '2023-12-05', testName: 'Vitamin D', value: 35, unit: 'ng/mL', category: 'Blood', notes: '' },
-  { id: '6', date: '2023-12-05', testName: 'WBC (White Blood Cells)', value: 6.5, unit: 'K/uL', category: 'Blood', notes: '' },
-];
-
-const MOCK_FRIENDS: Friend[] = [
-  {
-    id: 'f1',
-    name: 'Isabella Garcia',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Isabella&backgroundColor=b6e3f4',
-    language: 'Spanish',
-    status: 'online',
-    bio: 'Sjögren’s since 2018. Love painting and yoga! 🎨',
-    role: 'Patient',
-    condition: 'Sjögren’s'
-  },
-  {
-    id: 'f2',
-    name: 'Kenji Tanaka',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kenji&backgroundColor=c0aede',
-    language: 'Japanese',
-    status: 'offline',
-    bio: 'Software engineer living with autoimmune issues. 💻',
-    role: 'Patient',
-    condition: 'Lupus'
-  },
-  {
-    id: 'f3',
-    name: 'Marie Laurent',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marie&backgroundColor=ffdfbf',
-    language: 'French',
-    status: 'busy',
-    bio: 'Nutritionist and warrior. Ask me about anti-inflammatory diets! 🥗',
-    role: 'Patient',
-    condition: 'RA'
-  },
-  {
-    id: 'f4',
-    name: 'Lukas Schmidt',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lukas&backgroundColor=d1d4f9',
-    language: 'German',
-    status: 'online',
-    bio: 'Hiking enthusiast. Don’t let fatigue stop you!',
-    role: 'Patient',
-    condition: 'Sjögren’s'
-  }
-];
+const INITIAL_FRIENDS: Friend[] = [];
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(() => getDefaultEnabledView());
@@ -106,16 +42,16 @@ const App: React.FC = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   
   const [userProfile, setUserProfile] = useState<UserProfile>({
-    name: 'Sarah Jenkins',
-    username: 'sarah_j',
+    name: '',
+    username: '',
     role: 'Patient',
-    condition: 'Sjögren’s Warrior',
-    avatarUrl: 'https://picsum.photos/100/100', // Default placeholder
-    bio: 'Living my best life one spoon at a time! 🌱 Lover of yoga, green tea, and good books.',
-    interests: ['Yoga 🧘‍♀️', 'Reading 📚', 'Tea 🍵', 'Nature 🌿'],
-    age: '34',
-    location: 'Portland, OR',
-    gender: 'Female',
+    condition: '',
+    avatarUrl: '',
+    bio: '',
+    interests: [],
+    age: '',
+    location: '',
+    gender: '',
     language: 'English',
     themeMode: 'light',
     restMode: false,
@@ -251,7 +187,7 @@ const App: React.FC = () => {
       case AppView.EXPERTS:
         return <Experts language={language} />;
       case AppView.COMMUNITY:
-        return <Community userProfile={userProfile} friends={MOCK_FRIENDS} />;
+        return <Community userProfile={userProfile} friends={INITIAL_FRIENDS} />;
       case AppView.EVENTS:
         return <Events language={language} />;
       case AppView.GROUPS:
@@ -263,7 +199,7 @@ const App: React.FC = () => {
       case AppView.SETTINGS:
         return <Settings userProfile={userProfile} onUpdateProfile={setUserProfile} />;
       case AppView.PROFILE:
-        return <Profile userProfile={userProfile} onUpdateProfile={setUserProfile} friends={MOCK_FRIENDS} />;
+        return <Profile userProfile={userProfile} onUpdateProfile={setUserProfile} friends={INITIAL_FRIENDS} />;
       default:
         return <Dashboard data={data} language={language} />;
     }
@@ -373,3 +309,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

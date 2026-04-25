@@ -98,7 +98,7 @@ export interface Friend {
   language: string; // e.g., 'Spanish', 'Japanese'
   status: 'online' | 'offline' | 'busy';
   bio: string;
-  role?: UserRole; // Optional for backward compatibility with existing mocks
+  role?: UserRole;
   condition?: string; // Helpful for discover matching
   // Added properties for Discovery functionality
   age?: string;

@@ -115,7 +115,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'mvp-active',
     isMvp: true,
     state: 'visible',
-    note: 'Quiet support flow inside HealUp Connect with mocked realtime pulse, responder states, custom support notes, and preset affirmations. Mobile bottom nav presents this as Community and the SOS shortcut opens it directly.',
+    note: 'Quiet support flow inside HealUp Connect with empty realtime-support states, responder states, custom support notes, and preset affirmations. Mobile bottom nav presents this as Community and the SOS shortcut opens it directly.',
     appView: AppView.PAIN_PULSE,
   },
   {
@@ -181,14 +181,14 @@ export const featureRegistry: FeatureDefinition[] = [
     note: 'Dark mode is wired to app state and persisted locally on the device.',
   },
   {
-    id: 'settings-mock-sections',
-    name: 'Settings Mock Actions',
+    id: 'settings-review-sections',
+    name: 'Settings Review Actions',
     navLabel: null,
     routeOrComponent: 'components/Settings.tsx',
     status: 'needs-review',
     isMvp: false,
     state: 'visible',
-    note: 'Notifications, text size, support links, and sign-out are still present but mostly mock or no-op.',
+    note: 'Notifications, text size, support links, and sign-out are still present but need production review.',
   },
   {
     id: 'assistant-chat',
@@ -209,7 +209,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'hidden-kept-for-later',
     isMvp: false,
     state: 'hidden',
-    note: 'Friend messaging UI with mocked conversations and AI translation remains in code.',
+    note: 'Friend messaging UI with empty contact and conversation states remains in code.',
     appView: AppView.COMMUNITY,
   },
   {
@@ -220,7 +220,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'hidden-kept-for-later',
     isMvp: false,
     state: 'hidden',
-    note: 'Discovery flow includes people matching and discoverable groups tabs, powered by mock data.',
+    note: 'Discovery flow includes people matching and discoverable groups tabs with empty live-data-ready states.',
     appView: AppView.DISCOVER,
   },
   {
@@ -231,7 +231,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'hidden-kept-for-later',
     isMvp: false,
     state: 'hidden',
-    note: 'Group browsing and create-group entry points are implemented with mock data.',
+    note: 'Group browsing and create-group entry points are implemented with empty live-data-ready states.',
     appView: AppView.GROUPS,
   },
   {
@@ -242,7 +242,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'hidden-kept-for-later',
     isMvp: false,
     state: 'hidden',
-    note: 'Event discovery, filters, and registration toggles are implemented with mock content.',
+    note: 'Event discovery, filters, and registration toggles are implemented with empty live-data-ready states.',
     appView: AppView.EVENTS,
   },
   {
@@ -253,7 +253,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'hidden-kept-for-later',
     isMvp: false,
     state: 'hidden',
-    note: 'Expert directory and partner CTA exist in UI but are currently mock-backed.',
+    note: 'Expert directory and partner CTA exist in UI with an empty live-data-ready directory state.',
     appView: AppView.EXPERTS,
   },
   {

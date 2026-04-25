@@ -23,9 +23,10 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ data, language, restMode = false }) => {
+  const hasData = data.length > 0;
   // Calculate averages
-  const avgFatigueVal = (data.reduce((acc, curr) => acc + curr.fatigue, 0) / data.length).toFixed(1);
-  const avgSleepVal = (data.reduce((acc, curr) => acc + curr.sleepHours, 0) / data.length).toFixed(1);
+  const avgFatigueVal = hasData ? (data.reduce((acc, curr) => acc + curr.fatigue, 0) / data.length).toFixed(1) : '0.0';
+  const avgSleepVal = hasData ? (data.reduce((acc, curr) => acc + curr.sleepHours, 0) / data.length).toFixed(1) : '0.0';
   const uniqueDates = Array.from(new Set(data.map((record) => record.date))).sort();
 
   const streakDays = (() => {
@@ -76,7 +77,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, language, restMode = false 
   return (
     <div className="healup-reveal space-y-8 animate-in fade-in duration-500">
       <header className="mb-10">
-        <h1 className="text-2xl font-bold text-gray-900">{t('welcomeBack', language)}, Sarah</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('welcomeBack', language)}</h1>
         <p className="text-gray-500">{t('healthOverview', language)}</p>
       </header>
 
@@ -88,9 +89,16 @@ const Dashboard: React.FC<DashboardProps> = ({ data, language, restMode = false 
             <p className="mt-2 max-w-xl text-sm leading-7 text-gray-600">
               {t('consistencySubtitle', language)}
             </p>
-            <p className="mt-3 inline-flex rounded-full bg-[#fdfaf4]/95 px-4 py-2 text-sm font-medium text-matcha-800 shadow-sm">
-              You've cared for yourself {caringDaysThisWeek} days this week 🌱
-            </p>
+            {hasData ? (
+              <p className="mt-3 inline-flex rounded-full bg-[#fdfaf4]/95 px-4 py-2 text-sm font-medium text-matcha-800 shadow-sm">
+                You've cared for yourself {caringDaysThisWeek} days this week
+              </p>
+            ) : (
+              <div className="mt-4 rounded-2xl border border-matcha-100 bg-[#fdfaf4]/95 p-4 shadow-sm">
+                <p className="text-sm font-semibold text-matcha-800">No entries yet.</p>
+                <p className="mt-1 text-sm leading-6 text-gray-500">Once you start tracking, your information will appear here.</p>
+              </div>
+            )}
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -183,7 +191,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, language, restMode = false 
         </div>
       </section>
 
-      {!restMode && (
+      {!restMode && (hasData ? (
       <>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="healup-card rounded-[26px] p-5">
@@ -274,7 +282,12 @@ const Dashboard: React.FC<DashboardProps> = ({ data, language, restMode = false 
         </div>
       </div>
       </>
-      )}
+      ) : (
+        <section className="healup-card rounded-[30px] p-7 text-center">
+          <p className="text-sm font-semibold text-matcha-800">No entries yet.</p>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">Your symptom history will appear here once you add your first check-in.</p>
+        </section>
+      ))}
     </div>
   );
 };

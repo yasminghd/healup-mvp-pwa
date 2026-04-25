@@ -21,124 +21,8 @@ interface DiscoverProps {
   userProfile: UserProfile;
 }
 
-// Mock Strangers (Potential Friends)
-const MOCK_PEOPLE: Friend[] = [
-  {
-    id: 'p1',
-    name: 'Elena Rossi',
-    age: '36',
-    gender: 'Female',
-    location: 'Portland, OR',
-    condition: 'Sjögren’s',
-    role: 'Patient',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena&backgroundColor=ffdfbf',
-    bio: 'Looking for walking buddies! 🌲',
-    interests: ['Nature', 'Walking'],
-    matchScore: 95,
-    language: 'English',
-    status: 'online'
-  },
-  {
-    id: 'p2',
-    name: 'David Kim',
-    age: '32',
-    gender: 'Male',
-    location: 'Seattle, WA',
-    condition: 'Lupus',
-    role: 'Patient',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David&backgroundColor=c0aede',
-    bio: 'Techie by day, gamer by night.',
-    interests: ['Gaming', 'Tech'],
-    matchScore: 60,
-    language: 'English',
-    status: 'online'
-  },
-  {
-    id: 'p3',
-    name: 'Sofia Martinez',
-    age: '34',
-    gender: 'Female',
-    location: 'Austin, TX',
-    condition: 'Sjögren’s',
-    role: 'Patient',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sofia&backgroundColor=b6e3f4',
-    bio: 'Yoga teacher specializing in autoimmune health.',
-    interests: ['Yoga', 'Wellness'],
-    matchScore: 88,
-    language: 'Spanish',
-    status: 'online'
-  },
-  {
-    id: 'p4',
-    name: 'Marcus Johnson',
-    age: '45',
-    gender: 'Male',
-    location: 'Portland, OR',
-    condition: 'RA & Sjögren’s',
-    role: 'Patient',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus&backgroundColor=d1d4f9',
-    bio: 'Recently diagnosed. Learning to navigate this.',
-    interests: ['Reading', 'Coffee'],
-    matchScore: 85,
-    language: 'English',
-    status: 'offline'
-  },
-  {
-    id: 'p5',
-    name: 'James O\'Connor',
-    age: '38',
-    gender: 'Male',
-    location: 'Portland, OR',
-    condition: 'Sjögren’s (Wife)',
-    role: 'Caregiver',
-    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James&backgroundColor=e6e6e6',
-    bio: 'Caring for my wife. Looking for other partners to chat with about support.',
-    interests: ['Cooking', 'Hiking'],
-    matchScore: 90,
-    language: 'English',
-    status: 'online'
-  }
-];
-
-// Mock Discoverable Groups
-const MOCK_DISCOVER_GROUPS: Group[] = [
-  {
-    id: 'g101',
-    name: 'Pacific Northwest Hikers',
-    description: 'Gentle hiking group for those with fatigue issues. We take it slow!',
-    memberCount: 85,
-    role: 'Member', // Reusing type, effectively "None"
-    imageUrl: 'https://picsum.photos/seed/hike/400/200',
-    lastActive: '1 day ago'
-  },
-  {
-    id: 'g102',
-    name: 'Autoimmune Keto',
-    description: 'Discussing the ketogenic diet for inflammation management.',
-    memberCount: 1200,
-    role: 'Member',
-    imageUrl: 'https://picsum.photos/seed/keto/400/200',
-    lastActive: '10 mins ago'
-  },
-  {
-    id: 'g103',
-    name: 'Men with Autoimmune',
-    description: 'A space for men to discuss health challenges.',
-    memberCount: 45,
-    role: 'Member',
-    imageUrl: 'https://picsum.photos/seed/men/400/200',
-    lastActive: '5 hours ago'
-  },
-  {
-    id: 'g104',
-    name: 'Caregiver Support Circle',
-    description: 'A safe haven for those caring for loved ones with autoimmune diseases.',
-    memberCount: 120,
-    role: 'Member',
-    imageUrl: 'https://picsum.photos/seed/caregiver/400/200',
-    lastActive: '2 days ago'
-  }
-];
+const PEOPLE: Friend[] = [];
+const DISCOVER_GROUPS: Group[] = [];
 
 const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
   const language = userProfile.language || 'English';
@@ -156,15 +40,15 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
     setConnectedIds(prev => new Set(prev).add(id));
   };
 
-  const filteredPeople = MOCK_PEOPLE.filter(person => {
+  const filteredPeople = PEOPLE.filter(person => {
     let match = true;
 
     // 1. Same Condition
     if (filterCondition && userProfile.condition) {
-       // Simple substring check for mock purposes
+       
        const pCondition = person.condition || '';
        if (!pCondition.includes(userProfile.condition.split(' ')[0])) {
-         // Being lenient for demo: check if both contain "Sjögren"
+         
          const pLower = pCondition.toLowerCase();
          const uLower = userProfile.condition.toLowerCase();
          if (!pLower.includes('sjögren') || !uLower.includes('sjögren')) {
@@ -365,7 +249,8 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
              {filteredPeople.length === 0 && (
                <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                   <Search size={48} className="mx-auto mb-2 opacity-20" />
-                  <p>No matches found. Try adjusting your filters.</p>
+                  <p className="font-medium text-gray-600">No entries yet.</p>
+                  <p className="mt-1 text-sm">People will appear here once live connection data is received.</p>
                </div>
              )}
           </div>
@@ -375,7 +260,7 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
 
       {activeTab === 'groups' && (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in slide-in-from-right-2">
-           {MOCK_DISCOVER_GROUPS.map(group => (
+           {DISCOVER_GROUPS.map(group => (
               <div key={group.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-md transition-all">
                   <div className="h-32 bg-gray-100 relative">
                       <img src={group.imageUrl} alt={group.name} className="w-full h-full object-cover" />
@@ -392,6 +277,13 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
                   </div>
               </div>
            ))}
+           {DISCOVER_GROUPS.length === 0 && (
+              <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                <Tent size={48} className="mx-auto mb-2 opacity-20" />
+                <p className="font-medium text-gray-600">No entries yet.</p>
+                <p className="mt-1 text-sm">Groups will appear here once live community data is received.</p>
+              </div>
+           )}
         </div>
       )}
 

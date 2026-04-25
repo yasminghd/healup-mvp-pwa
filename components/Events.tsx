@@ -35,140 +35,7 @@ interface HealthEvent {
   distanceMiles?: number;
 }
 
-const MOCK_EVENTS: HealthEvent[] = [
-  {
-    id: '1',
-    title: 'Managing Flares: Nutrition & Diet',
-    description: 'Join Dr. Wilson for a deep dive into anti-inflammatory foods that can help manage Sjögren’s symptoms.',
-    host: 'Dr. James Wilson',
-    date: '2024-05-15',
-    time: '2:00 PM EST',
-    type: 'educational',
-    category: 'Webinar',
-    isVirtual: true,
-    imageUrl: 'https://picsum.photos/seed/nutrition/400/200',
-    registered: true,
-    language: 'English'
-  },
-  {
-    id: '2',
-    title: 'Portland Warriors Coffee Meetup',
-    description: 'Casual in-person meetup for patients in the Portland area. Come share your stories and support each other.',
-    host: 'Sarah Jenkins (You)',
-    date: '2024-05-18',
-    time: '10:00 AM PST',
-    type: 'community',
-    category: 'Social',
-    isVirtual: false,
-    location: 'Matcha Cafe, Pearl District',
-    imageUrl: 'https://picsum.photos/seed/coffee/400/200',
-    registered: true,
-    language: 'English',
-    distanceMiles: 3.5
-  },
-  {
-    id: '3',
-    title: 'New Therapies on the Horizon',
-    description: 'The Sjogren’s Foundation presents an update on clinical trials and upcoming medications for 2024.',
-    host: 'Sjögren’s Foundation',
-    date: '2024-05-22',
-    time: '5:00 PM EST',
-    type: 'educational',
-    category: 'Medical Update',
-    isVirtual: true,
-    imageUrl: 'https://picsum.photos/seed/medicine/400/200',
-    registered: false,
-    language: 'English'
-  },
-  {
-    id: '4',
-    title: 'Thursday Night Virtual Support',
-    description: 'Our weekly safe space to vent, laugh, and cry. Open to all autoimmune warriors.',
-    host: 'Autoimmune Alliance',
-    date: '2024-05-23',
-    time: '7:00 PM CST',
-    type: 'community',
-    category: 'Support Group',
-    isVirtual: true,
-    imageUrl: 'https://picsum.photos/seed/support/400/200',
-    registered: false,
-    language: 'English'
-  },
-  {
-    id: '5',
-    title: 'Dry Eye Workshop: Tips & Tricks',
-    description: 'Practical demonstration of eyelid hygiene, warm compresses, and drop administration.',
-    host: 'Dr. Ayesha Patel',
-    date: '2024-05-28',
-    time: '1:00 PM EST',
-    type: 'educational',
-    category: 'Workshop',
-    isVirtual: true,
-    imageUrl: 'https://picsum.photos/seed/eye/400/200',
-    registered: false,
-    language: 'English'
-  },
-  {
-    id: '6',
-    title: 'Vivir con Sjögren: Estrategias Diarias',
-    description: 'Un seminario web especial para nuestra comunidad de habla hispana sobre el manejo de la fatiga.',
-    host: 'Asociación Española',
-    date: '2024-06-02',
-    time: '11:00 AM CST',
-    type: 'educational',
-    category: 'Webinar',
-    isVirtual: true,
-    imageUrl: 'https://picsum.photos/seed/spanish/400/200',
-    registered: false,
-    language: 'Spanish'
-  },
-  {
-    id: '7',
-    title: 'Seattle Regional Conference',
-    description: 'Annual gathering of patients and researchers in the Pacific Northwest.',
-    host: 'NW Autoimmune Network',
-    date: '2024-06-10',
-    time: '9:00 AM PST',
-    type: 'educational',
-    category: 'Conference',
-    isVirtual: false,
-    location: 'Seattle Convention Center',
-    imageUrl: 'https://picsum.photos/seed/seattle/400/200',
-    registered: false,
-    language: 'English',
-    distanceMiles: 175
-  },
-  {
-    id: '8',
-    title: 'Cucina Antinfiammatoria',
-    description: 'Impara a cucinare piatti deliziosi che aiutano a ridurre l\'infiammazione nel corpo.',
-    host: 'Dr. Marco Rossi',
-    date: '2024-06-15',
-    time: '6:00 PM CET',
-    type: 'educational',
-    category: 'Workshop',
-    isVirtual: true,
-    imageUrl: 'https://picsum.photos/seed/cooking/400/200',
-    registered: false,
-    language: 'Italian'
-  },
-  {
-    id: '9',
-    title: 'Sentupada a Cuira',
-    description: 'Nus ans inscuntrain per barattar ideas ed experientschas da viver cun malsognas autoimmunas.',
-    host: 'Grup da sustegn Grischun',
-    date: '2024-06-20',
-    time: '7:00 PM CET',
-    type: 'community',
-    category: 'Social',
-    isVirtual: false,
-    location: 'Chur, GR',
-    imageUrl: 'https://picsum.photos/seed/chur/400/200',
-    registered: false,
-    language: 'Romansh',
-    distanceMiles: 5200 
-  }
-];
+const EVENTS: HealthEvent[] = [];
 
 interface EventsProps {
     language: string;
@@ -182,7 +49,7 @@ const Events: React.FC<EventsProps> = ({ language }) => {
   const [distanceFilter, setDistanceFilter] = useState<number>(50); // Value depends on unit
   const [distanceUnit, setDistanceUnit] = useState<'mi' | 'km'>('mi');
   
-  const [events, setEvents] = useState(MOCK_EVENTS);
+  const [events, setEvents] = useState(EVENTS);
 
   const toggleRegister = (id: string) => {
     setEvents(prev => prev.map(e => 
@@ -241,7 +108,7 @@ const Events: React.FC<EventsProps> = ({ language }) => {
     return t(`lang${langKey}`, language);
   };
 
-  const uniqueLanguages = ['All', ...Array.from(new Set(MOCK_EVENTS.map(e => e.language)))];
+  const uniqueLanguages = ['All', ...Array.from(new Set(events.map(e => e.language)))];
   const maxDistance = distanceUnit === 'mi' ? 200 : 320;
 
   return (
@@ -445,7 +312,8 @@ const Events: React.FC<EventsProps> = ({ language }) => {
       {filteredEvents.length === 0 && (
         <div className="text-center py-20 text-gray-400 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
           <Search size={48} className="mx-auto mb-4 opacity-20" />
-          <p className="text-lg font-medium text-gray-600">{t('noEvents', language)}</p>
+          <p className="text-lg font-medium text-gray-600">No entries yet.</p>
+          <p className="mt-1 text-sm">Events will appear here once live event data is received.</p>
           <button 
             onClick={() => {
                 setCategoryFilter('all');
@@ -465,3 +333,4 @@ const Events: React.FC<EventsProps> = ({ language }) => {
 };
 
 export default Events;
+

@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Friend, ChatMessage, UserProfile } from '../types';
 import { Send, Search, Globe, MoreVertical, Phone, Video, Mic, Languages, Loader2, Sparkles, MessageCircle } from 'lucide-react';
-import { translateText } from '../services/geminiService';
 import { t } from '../translations';
 
 interface CommunityProps {
@@ -10,19 +9,12 @@ interface CommunityProps {
   friends: Friend[];
 }
 
-// Initial messages
-const INITIAL_MESSAGES: Record<string, ChatMessage[]> = {
-  'f1': [
-    { id: '1', senderId: 'f1', text: '¡Hola! ¿Cómo te sientes hoy?', translatedText: 'Hello! How are you feeling today?', timestamp: new Date(Date.now() - 3600000), role: 'model', originalLanguage: 'Spanish' },
-  ]
-};
-
 const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
   const language = userProfile.language || 'English';
-  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(friends[0]);
-  const [chats, setChats] = useState<Record<string, ChatMessage[]>>(INITIAL_MESSAGES);
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(friends[0] || null);
+  const [chats, setChats] = useState<Record<string, ChatMessage[]>>({});
   const [input, setInput] = useState('');
-  const [isTranslating, setIsTranslating] = useState(false);
+  const [isTranslating] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Split friends into Active Chats and Others
@@ -55,42 +47,6 @@ const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
       [selectedFriend.id]: [...(prev[selectedFriend.id] || []), newMessage]
     }));
     setInput('');
-
-    // 2. Simulate Reply from Friend (Mocking functionality)
-    setTimeout(async () => {
-      setIsTranslating(true);
-      
-      // Simulating a reply in the friend's native language
-      let friendReplyText = "";
-      if (selectedFriend.language === 'Spanish') friendReplyText = "¡Eso suena genial! Me alegro mucho por ti. ¿Has probado los nuevos ejercicios?";
-      else if (selectedFriend.language === 'Japanese') friendReplyText = "それは素晴らしいですね！私も試してみます。";
-      else if (selectedFriend.language === 'French') friendReplyText = "C'est merveilleux ! Je suis content pour toi.";
-      else if (selectedFriend.language === 'German') friendReplyText = "Das ist großartig! Ich freue mich für dich.";
-      else friendReplyText = "That sounds great! I'm happy for you.";
-
-      // 3. Translate Friend's Reply to User's Language
-      let translated = "";
-      if (selectedFriend.language !== (userProfile.language || 'English')) {
-         translated = await translateText(friendReplyText, userProfile.language || 'English');
-      }
-
-      const replyMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        senderId: selectedFriend.id,
-        text: friendReplyText,
-        translatedText: translated,
-        timestamp: new Date(),
-        role: 'model',
-        originalLanguage: selectedFriend.language
-      };
-
-      setChats(prev => ({
-        ...prev,
-        [selectedFriend.id]: [...(prev[selectedFriend.id] || []), replyMessage]
-      }));
-      setIsTranslating(false);
-
-    }, 1500); // Delay to simulate typing
   };
 
   const currentMessages = selectedFriend ? (chats[selectedFriend.id] || []) : [];
@@ -279,3 +235,4 @@ const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
 };
 
 export default Community;
+

@@ -1,18 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Heart, HeartHandshake, Sparkles } from 'lucide-react';
 import PulseCircle from './painPulse/PulseCircle';
 import StateView from './painPulse/StateView';
-import SupportCard from './painPulse/SupportCard';
 
 type PulseMode = 'request' | 'respond';
 type RequestState = 'idle' | 'sending' | 'received';
 type ResponseState = 'idle' | 'sending' | 'sent';
-
-const SUPPORT_MESSAGES = [
-  'Sending you strength',
-  "We're here for you.",
-  'Holding a little calm for you today.',
-];
 
 const RESPONSE_PRESETS = [
   'Sending you strength',
@@ -27,7 +20,6 @@ const PainPulse: React.FC = () => {
   const [mode, setMode] = useState<PulseMode>('request');
   const [requestState, setRequestState] = useState<RequestState>('idle');
   const [responseState, setResponseState] = useState<ResponseState>('idle');
-  const [supportCount, setSupportCount] = useState(14);
   const [supportMessage, setSupportMessage] = useState(RESPONSE_PRESETS[0]);
   const [selectedEmoji, setSelectedEmoji] = useState(RESPONSE_EMOJIS[0]);
 
@@ -38,7 +30,6 @@ const PainPulse: React.FC = () => {
 
     // TODO: Replace with realtime pulse-request API + websocket subscription.
     const timer = window.setTimeout(() => {
-      setSupportCount(14);
       setRequestState('received');
     }, 1800);
 
@@ -58,10 +49,6 @@ const PainPulse: React.FC = () => {
     return () => window.clearTimeout(timer);
   }, [responseState]);
 
-  const supportCards = useMemo(() => {
-    return SUPPORT_MESSAGES.map((message) => <SupportCard key={message} message={message} />);
-  }, []);
-
   const handleSendPulse = () => {
     if (requestState === 'sending') return;
     setRequestState('sending');
@@ -74,7 +61,6 @@ const PainPulse: React.FC = () => {
 
   const resetRequester = () => {
     setRequestState('idle');
-    setSupportCount(14);
   };
 
   const resetResponder = () => {
@@ -88,10 +74,9 @@ const PainPulse: React.FC = () => {
       return (
         <StateView
           eyebrow="Pain Pulse"
-          title="You're Not Alone"
-          description={`${supportCount} people are with you right now.`}
+          title="Pulse Sent"
+          description="No support signals yet. Once live support data is received, responses will appear here."
         >
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{supportCards}</div>
           <button
             type="button"
             onClick={resetRequester}
@@ -300,15 +285,15 @@ const PainPulse: React.FC = () => {
                 </div>
                 <div className="healup-card-soft flex items-start gap-3 rounded-[24px] p-4">
                   <Sparkles size={16} className="mt-0.5 text-matcha-600" />
-                  <p>The interaction flow is mocked locally for now, ready to connect to realtime APIs later.</p>
+                  <p>Live support responses will appear here once live support data is received.</p>
                 </div>
               </div>
             </StateView>
 
             <div className="healup-card-soft rounded-[30px] p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-matcha-600">Support Snapshot</p>
-              <p className="mt-3 text-3xl font-bold tracking-tight text-gray-900">{supportCount}</p>
-              <p className="mt-1 text-sm text-gray-500">quiet signals available in the current mock session</p>
+              <p className="mt-3 text-sm font-semibold text-matcha-800">No entries yet.</p>
+              <p className="mt-1 text-sm text-gray-500">Support activity will appear here once live support data is received.</p>
             </div>
           </aside>
         </div>

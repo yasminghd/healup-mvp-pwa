@@ -19,115 +19,10 @@ interface ResearchProps {
 
 type TabType = 'journals' | 'news' | 'trials' | 'recruitment';
 
-// --- MOCK DATA ---
-
-const MOCK_JOURNALS = [
-  {
-    id: 1,
-    title: "Efficacy and Safety of Ianalumab in Sjögren’s Syndrome: A Randomized, Double-Blind Trial",
-    authors: "Bowman, S., et al.",
-    journal: "The Lancet Rheumatology",
-    date: "2024-03-15",
-    summary: "A phase 2b study showing dose-dependent improvements in disease activity (ESSDAI) and patient-reported outcomes compared to placebo over 24 weeks.",
-    url: "#"
-  },
-  {
-    id: 2,
-    title: "Novel Biomarkers for Early Detection of Autoimmune Flares",
-    authors: "Chen, L. & Smith, J.",
-    journal: "Journal of Autoimmunity",
-    date: "2024-04-10",
-    summary: "Researchers identified a panel of 3 cytokine markers in saliva that predict symptom flare-ups with 85% accuracy up to 48 hours in advance.",
-    url: "#"
-  },
-  {
-    id: 3,
-    title: "Dietary Interventions and Fatigue Management in Systemic Autoimmune Diseases",
-    authors: "Garcia-Perez, M.",
-    journal: "Nutrition Reviews",
-    date: "2024-02-28",
-    summary: "A systematic review suggesting that a Mediterranean-style diet significantly reduces self-reported fatigue levels in patients with Lupus and Sjögren’s.",
-    url: "#"
-  }
-];
-
-const MOCK_NEWS = [
-  {
-    id: 1,
-    headline: "FDA Grants Fast Track Designation for New Sjögren’s Therapy",
-    source: "Health Daily",
-    date: "2 days ago",
-    snippet: "The new biologic drug 'SjoBlock' has received special status from the FDA, potentially speeding up its path to patients by 2026.",
-    imageUrl: "https://picsum.photos/seed/news1/300/200",
-    url: "#"
-  },
-  {
-    id: 2,
-    headline: "Why Autoimmune Diseases Affect Women More Than Men",
-    source: "Science Magazine",
-    date: "1 week ago",
-    snippet: "A new Stanford study points to the X-chromosome gene regulation mechanism 'Xist' as a key driver in the disparity.",
-    imageUrl: "https://picsum.photos/seed/news2/300/200",
-    url: "#"
-  },
-  {
-    id: 3,
-    headline: "Living with Invisible Illness: A Photo Essay",
-    source: "The New York Times",
-    date: "3 weeks ago",
-    snippet: "Five patients share their daily reality of managing chronic fatigue and pain while looking 'perfectly healthy' on the outside.",
-    imageUrl: "https://picsum.photos/seed/news3/300/200",
-    url: "#"
-  }
-];
-
-const MOCK_TRIALS = [
-  {
-    id: 1,
-    title: "Safety Evaluation of Drug X-101",
-    phase: "Phase 3",
-    status: "Active",
-    summary: "Evaluating long-term safety profile in 500 participants over 2 years. Interim results show no major adverse events.",
-    institute: "Global Pharma Inc."
-  },
-  {
-    id: 2,
-    title: "Vagus Nerve Stimulation for Dry Eye",
-    phase: "Phase 2",
-    status: "Completed",
-    summary: "Study met primary endpoints. Participants reported a 40% increase in tear production after 8 weeks of daily use.",
-    institute: "TechBio Labs"
-  },
-  {
-    id: 3,
-    title: "Gut Microbiome Modulation Study",
-    phase: "Phase 1",
-    status: "Analyzing",
-    summary: "First-in-human study to test if specific probiotics can lower systemic inflammation markers.",
-    institute: "University Medical Center"
-  }
-];
-
-const MOCK_RECRUITMENT = [
-  {
-    id: 1,
-    title: "Digital Biomarker Fatigue Study",
-    type: "Observational",
-    location: "Remote (App-based)",
-    compensation: "$50 Gift Card",
-    eligibility: "Diagnosed with Sjögren’s or Lupus, owns a smartwatch.",
-    institute: "Digital Health Institute"
-  },
-  {
-    id: 2,
-    title: "Clinical Trial for Severe Dry Eye",
-    type: "Interventional",
-    location: "Boston, London, Tokyo sites",
-    compensation: "Travel covered + Stipend",
-    eligibility: "Severe dry eye symptoms despite artificial tears use. Age 18-65.",
-    institute: "Ocular Research Group"
-  }
-];
+const JOURNALS: Array<any> = [];
+const NEWS: Array<any> = [];
+const TRIALS: Array<any> = [];
+const RECRUITMENT: Array<any> = [];
 
 const Research: React.FC<ResearchProps> = ({ language }) => {
   const [activeTab, setActiveTab] = useState<TabType>('journals');
@@ -145,6 +40,14 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
       <Icon size={20} className={activeTab === id ? 'text-matcha-600' : 'text-gray-400'} />
       <span className="text-sm font-semibold text-center">{label}</span>
     </button>
+  );
+
+  const EmptyState = ({ label }: { label: string }) => (
+    <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center text-gray-500">
+      <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
+      <p className="font-medium text-gray-700">No entries yet.</p>
+      <p className="mt-1 text-sm">{label} will appear here once live research data is received.</p>
+    </div>
   );
 
   return (
@@ -168,7 +71,7 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
         {/* Journals View */}
         {activeTab === 'journals' && (
           <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-            {MOCK_JOURNALS.map(article => (
+            {JOURNALS.map(article => (
               <div key={article.id} className="p-4 rounded-xl border border-gray-100 hover:border-matcha-200 transition-colors group">
                 <div className="flex flex-col md:flex-row justify-between gap-2 mb-2">
                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-matcha-700 transition-colors">{article.title}</h3>
@@ -185,13 +88,14 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                 </a>
               </div>
             ))}
+            {JOURNALS.length === 0 && <EmptyState label="Research articles" />}
           </div>
         )}
 
         {/* News View */}
         {activeTab === 'news' && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in slide-in-from-right-4 duration-300">
-            {MOCK_NEWS.map(news => (
+            {NEWS.map(news => (
               <div key={news.id} className="flex flex-col rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="h-40 bg-gray-100">
                    <img src={news.imageUrl} alt="News" className="w-full h-full object-cover" />
@@ -209,13 +113,14 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                 </div>
               </div>
             ))}
+            {NEWS.length === 0 && <div className="md:col-span-2 lg:col-span-3"><EmptyState label="News" /></div>}
           </div>
         )}
 
         {/* Trials View */}
         {activeTab === 'trials' && (
           <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-            {MOCK_TRIALS.map(trial => (
+            {TRIALS.map(trial => (
               <div key={trial.id} className="flex flex-col md:flex-row gap-6 p-6 rounded-xl border border-gray-100 bg-gray-50/30">
                  <div className="flex-1">
                    <div className="flex items-center gap-2 mb-2">
@@ -247,13 +152,14 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                  </div>
               </div>
             ))}
+            {TRIALS.length === 0 && <EmptyState label="Trials" />}
           </div>
         )}
 
         {/* Recruitment View */}
         {activeTab === 'recruitment' && (
           <div className="grid md:grid-cols-2 gap-6 animate-in slide-in-from-right-4 duration-300">
-            {MOCK_RECRUITMENT.map(study => (
+            {RECRUITMENT.map(study => (
               <div key={study.id} className="border-2 border-matcha-100 rounded-2xl p-6 bg-matcha-50/20 hover:border-matcha-300 transition-colors relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-matcha-100 text-matcha-800 text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">
                    {t('recruiting', language)}
@@ -284,11 +190,7 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                 </button>
               </div>
             ))}
-            
-            <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-gray-400 bg-gray-50/50">
-               <p className="text-sm font-medium">More studies coming soon...</p>
-               <p className="text-xs mt-1">Check back next week for updates.</p>
-            </div>
+            {RECRUITMENT.length === 0 && <div className="md:col-span-2"><EmptyState label="Recruiting studies" /></div>}
           </div>
         )}
 
@@ -298,3 +200,5 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
 };
 
 export default Research;
+
+

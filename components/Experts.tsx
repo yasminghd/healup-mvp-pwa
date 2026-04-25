@@ -8,40 +8,7 @@ interface ExpertsProps {
     language: string;
 }
 
-const MOCK_EXPERTS: ExpertProfile[] = [
-  {
-    id: '1',
-    name: 'Dr. Emily Chen',
-    specialty: 'Rheumatologist • Sjögren’s Specialist',
-    rating: 4.9,
-    imageUrl: 'https://picsum.photos/200/200?random=1',
-    available: true
-  },
-  {
-    id: '2',
-    name: 'Dr. James Wilson',
-    specialty: 'Autoimmune Nutritionist',
-    rating: 4.8,
-    imageUrl: 'https://picsum.photos/200/200?random=2',
-    available: true
-  },
-  {
-    id: '3',
-    name: 'Sarah Miller, PhD',
-    specialty: 'Clinical Psychologist',
-    rating: 5.0,
-    imageUrl: 'https://picsum.photos/200/200?random=3',
-    available: false
-  },
-  {
-    id: '4',
-    name: 'Dr. Ayesha Patel',
-    specialty: 'Ophthalmologist (Dry Eye Expert)',
-    rating: 4.9,
-    imageUrl: 'https://picsum.photos/200/200?random=4',
-    available: true
-  }
-];
+const EXPERTS: ExpertProfile[] = [];
 
 const Experts: React.FC<ExpertsProps> = ({ language }) => {
   return (
@@ -52,7 +19,7 @@ const Experts: React.FC<ExpertsProps> = ({ language }) => {
       </header>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {MOCK_EXPERTS.map((expert) => (
+        {EXPERTS.map((expert) => (
           <div key={expert.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex gap-4 transition-all hover:shadow-md">
             <img 
               src={expert.imageUrl} 
@@ -86,6 +53,13 @@ const Experts: React.FC<ExpertsProps> = ({ language }) => {
             </div>
           </div>
         ))}
+        {EXPERTS.length === 0 && (
+          <div className="md:col-span-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center text-gray-500">
+            <Calendar size={40} className="mx-auto mb-3 opacity-30" />
+            <p className="font-medium text-gray-700">No entries yet.</p>
+            <p className="mt-1 text-sm">Experts will appear here once live care team data is received.</p>
+          </div>
+        )}
       </div>
 
       <div className="bg-matcha-900 text-white rounded-2xl p-8 mt-8 relative overflow-hidden">
@@ -103,3 +77,4 @@ const Experts: React.FC<ExpertsProps> = ({ language }) => {
 };
 
 export default Experts;
+

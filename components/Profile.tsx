@@ -108,11 +108,17 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
           <div className="flex flex-col items-center gap-4">
              <div className="relative group">
                 <div className="w-40 h-40 rounded-full border-8 border-white shadow-xl overflow-hidden bg-white">
-                  <img 
-                    src={generatedImage || formData.avatarUrl} 
-                    alt="Profile Avatar" 
-                    className="w-full h-full object-cover"
-                  />
+                  {generatedImage || formData.avatarUrl ? (
+                    <img
+                      src={generatedImage || formData.avatarUrl}
+                      alt="Profile Avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-matcha-50 text-4xl font-bold text-matcha-700">
+                      {(formData.name || 'U').charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
                 {isEditing && (
                   <div className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-lg border border-gray-100 max-w-[250px]">
@@ -151,7 +157,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                     className="text-3xl font-bold text-gray-900 bg-transparent border-b-2 border-matcha-200 focus:border-matcha-500 outline-none w-full"
                   />
                 ) : (
-                  <h1 className="text-3xl font-bold text-gray-900">{formData.name}</h1>
+                  <h1 className="text-3xl font-bold text-gray-900">{formData.name || 'Your profile'}</h1>
                 )}
                 
                 <div className="flex items-center gap-2">
@@ -164,7 +170,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                       className="text-gray-500 font-medium bg-transparent border-b border-gray-200 focus:border-matcha-500 outline-none"
                     />
                   ) : (
-                    <span className="text-gray-500 font-medium">{formData.username}</span>
+                    <span className="text-gray-500 font-medium">{formData.username || 'Add a username'}</span>
                   )}
                 </div>
               </div>
@@ -216,7 +222,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
               ) : (
                 <span>
                    {formData.role === 'Caregiver' && <span className="font-normal opacity-90">{t('roleCaregiver', language)} • {t('caringFor', language)} </span>} 
-                   {formData.condition}
+                   {formData.condition || 'Add condition'}
                 </span>
               )}
             </div>
@@ -266,7 +272,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 />
               ) : (
                 <p className={`text-sm font-medium ${!formData.privacySettings.showLocation ? 'text-gray-300 italic' : 'text-gray-700'}`}>
-                  {formData.privacySettings.showLocation ? formData.location : 'Hidden'}
+                  {formData.privacySettings.showLocation ? (formData.location || 'Not added yet') : 'Hidden'}
                 </p>
               )}
             </div>
@@ -290,7 +296,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 />
               ) : (
                 <p className={`text-sm font-medium ${!formData.privacySettings.showAge ? 'text-gray-300 italic' : 'text-gray-700'}`}>
-                  {formData.privacySettings.showAge ? formData.age : 'Hidden'}
+                  {formData.privacySettings.showAge ? (formData.age || 'Not added yet') : 'Hidden'}
                 </p>
               )}
             </div>
@@ -320,7 +326,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 </select>
               ) : (
                 <p className={`text-sm font-medium ${!formData.privacySettings.showGender ? 'text-gray-300 italic' : 'text-gray-700'}`}>
-                  {formData.privacySettings.showGender ? formData.gender : 'Hidden'}
+                  {formData.privacySettings.showGender ? (formData.gender || 'Not added yet') : 'Hidden'}
                 </p>
               )}
             </div>
@@ -360,7 +366,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                   value={newInterest}
                   onChange={(e) => setNewInterest(e.target.value)}
                   onKeyDown={addInterest}
-                  placeholder="Add interest (e.g. Reading 📚) and press Enter"
+                  placeholder="Add interest and press Enter"
                   className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-matcha-400 outline-none transition-all"
                 />
                 <button 
@@ -374,7 +380,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
             
             {isEditing && (
               <p className="text-xs text-gray-400 mt-2">
-                Tip: Using emojis makes your profile more fun! 🎨
+                Add only what you want visible on your profile.
               </p>
             )}
           </div>
@@ -405,7 +411,8 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                </div>
              ) : (
                <div className="text-center py-6 text-gray-400">
-                 <p className="text-sm">You haven't added any friends yet.</p>
+                 <p className="text-sm font-medium text-gray-600">No entries yet.</p>
+                 <p className="mt-1 text-sm">Friends will appear here once you add a connection.</p>
                </div>
              )}
           </div>

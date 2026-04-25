@@ -16,6 +16,11 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
   const [loading, setLoading] = useState(false);
 
   const fetchInsights = async () => {
+    if (data.length === 0) {
+      setInsight(null);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const result = await generateHealthInsights(data, language);
     setInsight(result);
@@ -25,7 +30,7 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
   useEffect(() => {
     fetchInsights();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
+  }, [language, data.length]);
 
   return (
     <div className="healup-reveal space-y-8 animate-in fade-in duration-500">
@@ -36,7 +41,7 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
         </div>
         <button 
           onClick={fetchInsights} 
-          disabled={loading}
+          disabled={loading || data.length === 0}
           className="healup-card flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-medium text-gray-700 disabled:opacity-50"
         >
           <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
@@ -59,6 +64,11 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
                 tone="cream"
               />
             </div>
+          ) : data.length === 0 ? (
+            <div className="flex min-h-[260px] flex-col items-center justify-center text-center">
+              <p className="text-base font-semibold text-white">No entries yet.</p>
+              <p className="mt-2 max-w-md text-sm leading-6 text-matcha-50">Once you start tracking, your information will appear here.</p>
+            </div>
           ) : (
             <div className="prose prose-invert prose-p:text-matcha-50 prose-headings:text-white max-w-none">
                 {/* Simple Markdown Rendering Replacement */}
@@ -73,23 +83,15 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
           )}
         </div>
       </div>
-      
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="healup-card rounded-[28px] p-6">
-            <h4 className="font-semibold text-gray-800 mb-2">Sleep Hygiene</h4>
-            <p className="text-sm text-gray-600">Consider maintaining a consistent bedtime. Your data suggests flare-ups after nights with less than 6 hours of sleep.</p>
+      {data.length === 0 && (
+        <div className="healup-card rounded-[28px] p-6 text-center">
+          <p className="text-sm font-semibold text-matcha-800">No insights yet.</p>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">Your symptom history will appear here once you add your first check-in.</p>
         </div>
-        <div className="healup-card rounded-[28px] p-6">
-            <h4 className="font-semibold text-gray-800 mb-2">Hydration Check</h4>
-            <p className="text-sm text-gray-600">Great job on water intake! Consistent hydration helps mitigate dry mouth symptoms associated with Sjögren’s.</p>
-        </div>
-        <div className="healup-card rounded-[28px] p-6">
-            <h4 className="font-semibold text-gray-800 mb-2">Stress Management</h4>
-            <p className="text-sm text-gray-600">Mid-week stress spikes correlate with increased joint pain. Try 5-minute breathing exercises on Wednesday afternoons.</p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
 
 export default Insights;
+
