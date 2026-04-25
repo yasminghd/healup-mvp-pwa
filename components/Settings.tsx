@@ -163,13 +163,6 @@ const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile }) => 
           checked={true}
           onChange={() => {}}
         />
-        <div className="h-px bg-gray-100 my-1"></div>
-        <ToggleRow 
-          label={t('newInsights', language)}
-          description="Weekly summary availability alerts."
-          checked={false}
-          onChange={() => {}}
-        />
       </Section>
 
       {/* Appearance (Mock) */}

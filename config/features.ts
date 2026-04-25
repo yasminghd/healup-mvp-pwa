@@ -101,10 +101,10 @@ export const featureRegistry: FeatureDefinition[] = [
     name: 'AI Insights',
     navLabel: 'AI Insights',
     routeOrComponent: 'AppView.INSIGHTS -> components/Insights.tsx',
-    status: 'mvp-active',
-    isMvp: true,
-    state: 'visible',
-    note: 'Weekly AI analysis page is available and calls Gemini at runtime.',
+    status: 'hidden-kept-for-later',
+    isMvp: false,
+    state: 'hidden',
+    note: 'Weekly AI analysis page remains implemented but is hidden at this stage.',
     appView: AppView.INSIGHTS,
   },
   {
@@ -296,7 +296,6 @@ const viewFallbackOrder: AppView[] = [
   AppView.DASHBOARD,
   AppView.TRACKER,
   AppView.LAB_RESULTS,
-  AppView.INSIGHTS,
   AppView.SETTINGS,
   AppView.PROFILE,
 ];

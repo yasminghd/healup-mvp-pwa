@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppView } from '../types';
 import { BrainCircuit, Heart, House, NotebookPen, UserRound } from 'lucide-react';
+import { isViewEnabled } from '../config/features';
 
 type MobileTabBarProps = {
   currentView: AppView;
@@ -22,13 +23,15 @@ const tabItems: TabItem[] = [
 ];
 
 const MobileTabBar: React.FC<MobileTabBarProps> = ({ currentView, onSelect }) => {
+  const visibleTabItems = tabItems.filter((item) => isViewEnabled(item.id));
+
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-50 border-t border-matcha-100 bg-[#fbf8f1]/94 px-2 pt-2 backdrop-blur-lg lg:hidden"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.5rem)' }}
     >
-      <div className="mx-auto grid max-w-md grid-cols-5 gap-2">
-        {tabItems.map((item) => {
+      <div className="mx-auto grid max-w-md gap-2" style={{ gridTemplateColumns: `repeat(${visibleTabItems.length}, minmax(0, 1fr))` }}>
+        {visibleTabItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
 

@@ -16,7 +16,7 @@ Status meanings:
 ## Current Navigation
 
 Mobile-first navigation:
-- Bottom tab bar shows `Home`, `Track`, `Insights`, `Community`, and `Profile`
+- Bottom tab bar shows `Home`, `Track`, `Community`, and `Profile`
 - `Community` opens `Pain Pulse`
 - A persistent `SOS` button provides direct access to `Pain Pulse`
 
@@ -25,7 +25,7 @@ Mobile-first navigation:
 | Main | Dashboard | `AppView.DASHBOARD` / `components/Dashboard.tsx` | Yes | `mvp-active` | Current home screen. |
 | Journal | Track Symptoms | `AppView.TRACKER` / `components/Tracker.tsx` | Yes | `mvp-active` | Core symptom logging flow with optional suggested and custom symptom management, plus adjustable limits for lifestyle sliders. |
 | Journal | Lab Results | `AppView.LAB_RESULTS` / `components/LabResults.tsx` | Yes | `mvp-active` | Biomarker tracking page. |
-| Journal | AI Insights | `AppView.INSIGHTS` / `components/Insights.tsx` | Yes | `mvp-active` | AI-generated weekly summary. |
+| Journal | AI Insights | `AppView.INSIGHTS` / `components/Insights.tsx` | No | `hidden-kept-for-later` | Hidden at this stage; code preserved. |
 | Connect | Pain Pulse | `AppView.PAIN_PULSE` / `components/PainPulse.tsx` | Yes | `mvp-active` | Quiet anonymous support feature for pain check-ins; shown as `Community` in the mobile bottom tab bar. |
 | Connect | Discover | `AppView.DISCOVER` / `components/Discover.tsx` | No | `hidden-kept-for-later` | Hidden from MVP nav, code preserved. |
 | Connect | Groups | `AppView.GROUPS` / `components/Groups.tsx` | No | `hidden-kept-for-later` | Hidden from MVP nav, code preserved. |
@@ -50,7 +50,7 @@ Mobile-first navigation:
 | Lab Results | Lab Results | `AppView.LAB_RESULTS` / `components/LabResults.tsx` | `mvp-active` | Yes | visible | Manual lab logging, trend chart, recent history. |
 | Lab Scan Import | Scan Result | `components/LabResults.tsx`, `services/geminiService.ts` | `mvp-active` | Yes | visible | AI image parsing for lab reports; depends on Gemini setup. |
 | Lab Results Export | Export CSV | `components/LabResults.tsx` | `mvp-active` | Yes | visible | Exports lab history as CSV. |
-| AI Insights | AI Insights | `AppView.INSIGHTS` / `components/Insights.tsx` | `mvp-active` | Yes | visible | Gemini-powered weekly analysis page. |
+| AI Insights | AI Insights | `AppView.INSIGHTS` / `components/Insights.tsx` | `hidden-kept-for-later` | No | hidden | Gemini-powered weekly analysis page remains implemented but is hidden at this stage. |
 | Pain Pulse | Pain Pulse | `AppView.PAIN_PULSE` / `components/PainPulse.tsx` | `mvp-active` | Yes | visible | Connect feature for anonymous pain signals, support responses, custom support notes, preset affirmations, and received-support feedback. |
 | Profile Management | Profile card | `AppView.PROFILE` / `components/Profile.tsx` | `mvp-active` | Yes | visible | User profile editing, demographics, interests, and friend list. |
 | AI Avatar Generation | None | `components/Profile.tsx`, `services/geminiService.ts` | `mvp-active` | Yes | visible | Generates avatar artwork while editing profile. |
