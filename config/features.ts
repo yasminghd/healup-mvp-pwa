@@ -31,7 +31,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'mvp-active',
     isMvp: true,
     state: 'visible',
-    note: 'Primary home screen with a top consistency/rewards panel, warm self-care progress messaging, gentle care reminders, spacious health cards, uncluttered charts, and a shared care-focused footer in the app shell.',
+    note: 'Primary home screen with a top consistency/rewards panel, calm empty states before tracking starts, actual logged-day summary cards, and a shared care-focused footer in the app shell.',
     appView: AppView.DASHBOARD,
   },
   {
@@ -42,7 +42,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'mvp-active',
     isMvp: true,
     state: 'visible',
-    note: 'Core daily logging flow with calendar-based editing, one-tap Sjogren’s symptom selection, optional suggested symptoms, custom symptom tracking, user-adjustable limits for quantifiable lifestyle fields, and a simplified rest-mode view.',
+    note: 'Core daily logging starts with no predefined symptoms or lifestyle measures; patients can define their own tracked items, limits, and notes.',
     appView: AppView.TRACKER,
   },
   {
@@ -73,7 +73,7 @@ export const featureRegistry: FeatureDefinition[] = [
     status: 'mvp-active',
     isMvp: true,
     state: 'visible',
-    note: 'Manual lab entry, charts, and recent history are active in the MVP.',
+    note: 'Manual lab entry starts with no predefined lab history or selected tests; charts and recent history appear after patient-entered results.',
     appView: AppView.LAB_RESULTS,
   },
   {

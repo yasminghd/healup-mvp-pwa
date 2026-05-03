@@ -23,32 +23,19 @@ interface LabResultsProps {
   userProfile: UserProfile;
 }
 
-const STANDARD_RANGES: Record<string, { min: number; max: number; unit: string; description: string }> = {
-  'CRP (C-Reactive Protein)': { min: 0, max: 10, unit: 'mg/L', description: 'Marker for inflammation.' },
-  'ESR (Sed Rate)': { min: 0, max: 20, unit: 'mm/hr', description: 'Inflammation marker. Higher in females.' },
-  'Hemoglobin': { min: 12, max: 15.5, unit: 'g/dL', description: 'Oxygen carrying capacity.' },
-  'WBC (White Blood Cells)': { min: 4.5, max: 11, unit: 'K/uL', description: 'Immune system activity.' },
-  'Platelets': { min: 150, max: 450, unit: 'K/uL', description: 'Clotting ability.' },
-  'TSH': { min: 0.4, max: 4.0, unit: 'mIU/L', description: 'Thyroid function.' },
-  'Vitamin D': { min: 30, max: 100, unit: 'ng/mL', description: 'Bone and immune health.' },
-  'RF (Rheumatoid Factor)': { min: 0, max: 14, unit: 'IU/mL', description: 'Autoantibody marker.' },
-};
-
-const COMMON_TESTS = Object.keys(STANDARD_RANGES);
-
 const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfile }) => {
   const language = userProfile.language || 'English';
   const [isAdding, setIsAdding] = useState(false);
-  const [selectedTest, setSelectedTest] = useState<string>(COMMON_TESTS[0]);
+  const [selectedTest, setSelectedTest] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const [newResult, setNewResult] = useState<Partial<LabResult>>({
     date: new Date().toISOString().split('T')[0],
-    testName: COMMON_TESTS[0],
+    testName: '',
     category: 'Blood',
-    value: 0,
-    unit: STANDARD_RANGES[COMMON_TESTS[0]].unit,
+    value: undefined,
+    unit: '',
     notes: ''
   });
 
@@ -59,22 +46,8 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [labData, selectedTest]);
 
-  // Determine Range based on Demographics
   const getReferenceRange = (testName: string) => {
-    const standard = STANDARD_RANGES[testName];
-    if (!standard) return null;
-
-    let { min, max } = standard;
-
-    // Adjust for Gender (Simplified medical logic)
-    if (userProfile.gender === 'Female') {
-      if (testName.includes('ESR')) max = 30; // Females have higher ESR naturally
-      if (testName.includes('Hemoglobin')) { min = 12.1; max = 15.1; }
-    } else if (userProfile.gender === 'Male') {
-      if (testName.includes('Hemoglobin')) { min = 13.8; max = 17.2; }
-    }
-
-    return { min, max, unit: standard.unit, description: standard.description };
+    return null;
   };
 
   const currentRange = getReferenceRange(selectedTest);
@@ -95,16 +68,14 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
 
     onAddResult(result);
     setIsAdding(false);
-    // Reset form mostly, keep date
-    setNewResult(prev => ({ ...prev, value: 0, notes: '' }));
+    setSelectedTest(result.testName);
+    setNewResult(prev => ({ ...prev, testName: '', value: undefined, unit: '', notes: '' }));
   };
 
   const handleTestChange = (name: string) => {
-    const std = STANDARD_RANGES[name];
     setNewResult(prev => ({
       ...prev,
       testName: name,
-      unit: std ? std.unit : ''
     }));
   };
 
@@ -120,7 +91,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
       reader.onload = async () => {
         const base64 = reader.result as string;
         const parsedData = await parseLabResultsFromImage(base64);
-        
+
         if (parsedData) {
           setNewResult(prev => ({
             ...prev,
@@ -129,19 +100,18 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
             category: parsedData.category || 'Blood',
             date: parsedData.date || new Date().toISOString().split('T')[0],
           }));
-          // Switch to the parsed test name for the chart too if valid
-          if (parsedData.testName && (COMMON_TESTS.includes(parsedData.testName) || chartData.length > 0)) {
-            // Optional: setSelectedTest(parsedData.testName); 
+          if (parsedData.testName) {
+            setSelectedTest(parsedData.testName);
           }
           setIsAdding(true); // Open the form for review
         } else {
-            alert("Could not extract data from the image. Please enter manually.");
+            alert(t('couldNotExtract', language));
         }
         setIsAnalyzing(false);
       };
       reader.onerror = () => {
         setIsAnalyzing(false);
-        alert("Error reading file");
+        alert(t('errorReadingFile', language));
       };
     } catch (e) {
       console.error(e);
@@ -192,7 +162,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
           </p>
           {currentRange && (
              <p className={`text-xs mt-1 ${isSafe ? 'text-green-600' : 'text-amber-600'}`}>
-                {isSafe ? 'Within reference range' : 'Outside reference range'}
+                {isSafe ? t('withinReferenceRange', language) : t('outsideReferenceRange', language)}
              </p>
           )}
         </div>
@@ -232,11 +202,11 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
             {isAnalyzing ? <Loader2 size={18} className="animate-spin"/> : <Camera size={18} />}
             {t('scanResult', language)}
           </button>
-          <button 
+          <button
             onClick={() => setIsAdding(!isAdding)}
             className="healup-button flex items-center gap-2 rounded-[24px] px-4 py-2.5 text-white transition-colors hover:bg-matcha-700"
           >
-            {isAdding ? 'Cancel' : <><Plus size={18} /> {t('addManually', language)}</>}
+            {isAdding ? t('cancel', language) : <><Plus size={18} /> {t('addManually', language)}</>}
           </button>
         </div>
       </header>
@@ -247,25 +217,25 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
           {isAnalyzing && (
              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center flex-col text-matcha-800">
                <GentleLoader
-                 title="Reading your lab report gently"
-                 subtitle="Please take a moment while we pull the details into the form for review."
+                 title={t('readingLabReport', language)}
+                 subtitle={t('pleaseTakeMoment', language)}
                  compact
                />
              </div>
           )}
-          
+
           <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-gray-800">Log Test Result</h3>
+              <h3 className="font-bold text-gray-800">{t('logTestResult', language)}</h3>
               <span className="text-xs text-matcha-600 bg-matcha-50 px-2 py-1 rounded-full font-medium">
-                  Please review all details before saving
+                  {t('reviewBeforeSaving', language)}
               </span>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Date</label>
-              <input 
-                type="date" 
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t('dateLabel', language)}</label>
+              <input
+                type="date"
                 required
                 value={newResult.date}
                 onChange={(e) => setNewResult({...newResult, date: e.target.value})}
@@ -273,41 +243,39 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Test Name</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t('testNameLabel', language)}</label>
               <div className="relative">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     list="testNames"
                     value={newResult.testName}
                     onChange={(e) => {
                         const val = e.target.value;
                         setNewResult({...newResult, testName: val});
-                        // If user types a known test, update unit
-                        if(STANDARD_RANGES[val]) handleTestChange(val);
+                        handleTestChange(val);
                     }}
                     className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-matcha-500 outline-none"
                 />
                 <datalist id="testNames">
-                    {COMMON_TESTS.map(t => <option key={t} value={t} />)}
                 </datalist>
               </div>
             </div>
             <div className="flex gap-2">
               <div className="flex-1">
-                <label className="block text-xs font-medium text-gray-500 mb-1">Value</label>
-                <input 
-                  type="number" 
+                <label className="block text-xs font-medium text-gray-500 mb-1">{t('valueLabel', language)}</label>
+                <input
+                  type="number"
                   step="0.01"
                   required
-                  value={newResult.value}
+                  value={newResult.value ?? ''}
                   onChange={(e) => setNewResult({...newResult, value: parseFloat(e.target.value) || 0})}
                   className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-matcha-500 outline-none"
                 />
               </div>
               <div className="w-24">
-                <label className="block text-xs font-medium text-gray-500 mb-1">Unit</label>
-                <input 
-                  type="text" 
+                <label className="block text-xs font-medium text-gray-500 mb-1">{t('unitLabel', language)}</label>
+                <input
+                  type="text"
                   value={newResult.unit}
                   onChange={(e) => setNewResult({...newResult, unit: e.target.value})}
                   className="w-full p-2 border border-gray-200 rounded-lg bg-gray-50"
@@ -315,22 +283,22 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
               </div>
             </div>
              <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
-              <select 
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t('categoryLabel', language)}</label>
+              <select
                 value={newResult.category}
                 onChange={(e) => setNewResult({...newResult, category: e.target.value as any})}
                 className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-matcha-500 outline-none"
               >
-                <option value="Blood">Blood</option>
-                <option value="Urine">Urine</option>
-                <option value="Other">Other</option>
+                <option value="Blood">{t('catBlood', language)}</option>
+                <option value="Urine">{t('catUrine', language)}</option>
+                <option value="Other">{t('catOther', language)}</option>
               </select>
             </div>
             <div className="md:col-span-2">
-                <label className="block text-xs font-medium text-gray-500 mb-1">Notes</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Fasting, felt dizzy..."
+                <label className="block text-xs font-medium text-gray-500 mb-1">{t('notesLabel', language)}</label>
+                <input
+                  type="text"
+                  placeholder={t('labNotesPlaceholder', language)}
                   value={newResult.notes}
                   onChange={(e) => setNewResult({...newResult, notes: e.target.value})}
                   className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-matcha-500 outline-none"
@@ -338,7 +306,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
             </div>
             <div className="md:col-span-2">
                 <button type="submit" className="w-full bg-matcha-600 text-white font-bold py-2 rounded-lg hover:bg-matcha-700 flex items-center justify-center gap-2">
-                    <CheckCircle2 size={18} /> Confirm & Save Record
+                    <CheckCircle2 size={18} /> {t('confirmAndSave', language)}
                 </button>
             </div>
           </form>
@@ -358,19 +326,19 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
               </h2>
               {currentRange && (
                 <p className="text-xs text-gray-500 mt-1">
-                   Reference Range ({userProfile.gender || 'Standard'}): 
+                   {t('referenceRangeLabel', language)}
                    <span className="font-semibold text-matcha-700"> {currentRange.min} - {currentRange.max} {currentRange.unit}</span>
                 </p>
               )}
             </div>
-            <select 
+            <select
               value={selectedTest}
               onChange={(e) => setSelectedTest(e.target.value)}
               className="rounded-2xl border border-gray-200 bg-gray-50 p-3 text-sm focus:outline-none"
             >
-                {/* Only show tests that actually have data available + defaults */}
-                {Array.from(new Set([...COMMON_TESTS, ...labData.map(d => d.testName)])).map(t => (
-                    <option key={t} value={t}>{t}</option>
+                <option value="">{t('chooseSavedTest', language)}</option>
+                {Array.from(new Set(labData.map(d => d.testName))).map(name => (
+                    <option key={name} value={name}>{name}</option>
                 ))}
             </select>
           </div>
@@ -416,7 +384,8 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
             ) : (
                 <div className="h-full flex flex-col items-center justify-center text-gray-400">
                     <TestTube2 size={48} className="mb-2 opacity-50" />
-                    <p>No data recorded for {selectedTest} yet.</p>
+                    <p>{t('noLabResultsYet', language)}</p>
+                    <p className="mt-1 max-w-sm text-center text-sm">{t('addResultWhenReady', language)}</p>
                 </div>
             )}
           </div>
@@ -427,21 +396,21 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
             <div className="healup-card rounded-[30px] p-7">
                 <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
                     <CheckCircle2 size={18} className="text-matcha-600"/>
-                    Understanding Results
+                    {t('understandingResults', language)}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                    {currentRange?.description || "Select a test to see details about what it measures and why it matters for your condition."}
+                    {t('addLabResultsOverTime', language)}
                 </p>
-                
+
                 <div className="healup-card-soft rounded-[24px] p-5">
-                    <h4 className="text-xs font-bold text-matcha-800 mb-2 uppercase tracking-wide">Reference Context</h4>
+                    <h4 className="text-xs font-bold text-matcha-800 mb-2 uppercase tracking-wide">{t('referenceContext', language)}</h4>
                     <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Gender</span>
-                        <span className="font-semibold text-gray-800">{userProfile.gender || 'Not specified'}</span>
+                        <span className="text-gray-600">{t('gender', language)}</span>
+                        <span className="font-semibold text-gray-800">{userProfile.gender || t('notSpecified', language)}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm mt-1">
-                        <span className="text-gray-600">Age Group</span>
-                        <span className="font-semibold text-gray-800">{userProfile.age ? `${Math.floor(Number(userProfile.age)/10)*10}s` : 'Unknown'}</span>
+                        <span className="text-gray-600">{t('ageGroupLabel', language)}</span>
+                        <span className="font-semibold text-gray-800">{userProfile.age ? `${Math.floor(Number(userProfile.age)/10)*10}s` : t('unknownLabel', language)}</span>
                     </div>
                 </div>
             </div>
@@ -462,7 +431,7 @@ const LabResults: React.FC<LabResultsProps> = ({ labData, onAddResult, userProfi
                             </div>
                         </div>
                     ))}
-                    {labData.length === 0 && <p className="text-gray-400 text-sm text-center py-4">No history yet.</p>}
+                    {labData.length === 0 && <p className="text-gray-400 text-sm text-center py-4">{t('noHistoryYet', language)}</p>}
                  </div>
             </div>
         </div>

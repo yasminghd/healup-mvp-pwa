@@ -45,8 +45,8 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
   const EmptyState = ({ label }: { label: string }) => (
     <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center text-gray-500">
       <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
-      <p className="font-medium text-gray-700">No entries yet.</p>
-      <p className="mt-1 text-sm">{label} will appear here once live research data is received.</p>
+      <p className="font-medium text-gray-700">{t('noEntriesYet', language)}</p>
+      <p className="mt-1 text-sm">{label} {t('willAppearLive', language)}</p>
     </div>
   );
 
@@ -88,7 +88,7 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                 </a>
               </div>
             ))}
-            {JOURNALS.length === 0 && <EmptyState label="Research articles" />}
+            {JOURNALS.length === 0 && <EmptyState label={t('researchArticlesLabel', language)} />}
           </div>
         )}
 
@@ -113,7 +113,7 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                 </div>
               </div>
             ))}
-            {NEWS.length === 0 && <div className="md:col-span-2 lg:col-span-3"><EmptyState label="News" /></div>}
+            {NEWS.length === 0 && <div className="md:col-span-2 lg:col-span-3"><EmptyState label={t('newsLabel', language)} /></div>}
           </div>
         )}
 
@@ -152,7 +152,7 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                  </div>
               </div>
             ))}
-            {TRIALS.length === 0 && <EmptyState label="Trials" />}
+            {TRIALS.length === 0 && <EmptyState label={t('trialsLabel', language)} />}
           </div>
         )}
 
@@ -190,7 +190,7 @@ const Research: React.FC<ResearchProps> = ({ language }) => {
                 </button>
               </div>
             ))}
-            {RECRUITMENT.length === 0 && <div className="md:col-span-2"><EmptyState label="Recruiting studies" /></div>}
+            {RECRUITMENT.length === 0 && <div className="md:col-span-2"><EmptyState label={t('recruitingStudiesLabel', language)} /></div>}
           </div>
         )}
 

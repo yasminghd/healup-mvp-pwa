@@ -16,12 +16,22 @@ const AiAssistant: React.FC<AiAssistantProps> = ({ language }) => {
     {
       id: 'welcome',
       role: 'model',
-      text: "Hello, I'm your HealUp Assistant. I can help you understand your symptoms, suggest lifestyle adjustments for Sjögren’s, or just listen if you're having a tough day. How are you feeling?",
+      text: t('welcomeMessage', language),
       timestamp: new Date()
     }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Refresh welcome message when language changes (only if it's still the welcome state)
+  useEffect(() => {
+    setMessages((current) => {
+      if (current.length === 1 && current[0].id === 'welcome') {
+        return [{ ...current[0], text: t('welcomeMessage', language) }];
+      }
+      return current;
+    });
+  }, [language]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -73,7 +83,7 @@ const AiAssistant: React.FC<AiAssistantProps> = ({ language }) => {
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
         role: 'model',
-        text: "I'm having trouble connecting to the service right now. Please try again in a moment.",
+        text: t('connectionError', language),
         timestamp: new Date()
       }]);
     } finally {
@@ -131,7 +141,7 @@ const AiAssistant: React.FC<AiAssistantProps> = ({ language }) => {
              </div>
              <div className="bg-white border border-gray-200 p-4 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
                <Loader2 className="animate-spin text-matcha-600" size={16} />
-               <span className="text-xs text-gray-500">Thinking...</span>
+               <span className="text-xs text-gray-500">{t('thinking', language)}</span>
              </div>
            </div>
         )}

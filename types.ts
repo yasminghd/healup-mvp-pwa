@@ -67,7 +67,7 @@ export interface LifestyleLog {
   sleepHours: number;
   stressLevel: number; // 1-10
   waterIntake: number; // glasses
-  activityLevel: 'Sedentary' | 'Light' | 'Moderate' | 'Active';
+  activityLevel?: 'Sedentary' | 'Light' | 'Moderate' | 'Active';
 }
 
 export interface DailyRecord extends SymptomLog, LifestyleLog {

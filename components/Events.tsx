@@ -167,11 +167,11 @@ const Events: React.FC<EventsProps> = ({ language }) => {
                 <Filter size={16} /> {t('format', language)}:
               </span>
               <div className="flex gap-2">
-                <button 
+                <button
                   onClick={() => setFormatFilter('all')}
                   className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${formatFilter === 'all' ? 'bg-matcha-50 border-matcha-200 text-matcha-700' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                 >
-                  Any
+                  {t('anyFormat', language)}
                 </button>
                 <button 
                   onClick={() => setFormatFilter('virtual')}
@@ -241,7 +241,7 @@ const Events: React.FC<EventsProps> = ({ language }) => {
                   </div>
                   {!event.isVirtual && displayDistance !== null && (
                     <div className="bg-black/50 backdrop-blur-md text-white px-2 py-0.5 rounded-md text-[10px] font-medium flex items-center gap-1">
-                      <MapPin size={10} /> {displayDistance.toFixed(1)} {distanceUnit} away
+                      <MapPin size={10} /> {displayDistance.toFixed(1)} {distanceUnit} {t('awayLabel', language)}
                     </div>
                   )}
                 </div>
@@ -283,7 +283,7 @@ const Events: React.FC<EventsProps> = ({ language }) => {
                     </div>
                     <div className="flex items-center gap-2">
                       {event.isVirtual ? <Video size={14} /> : <MapPin size={14} />}
-                      {event.isVirtual ? 'Virtual Event' : event.location}
+                      {event.isVirtual ? t('virtualEventBadge', language) : event.location}
                     </div>
                   </div>
 
@@ -312,8 +312,8 @@ const Events: React.FC<EventsProps> = ({ language }) => {
       {filteredEvents.length === 0 && (
         <div className="text-center py-20 text-gray-400 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
           <Search size={48} className="mx-auto mb-4 opacity-20" />
-          <p className="text-lg font-medium text-gray-600">No entries yet.</p>
-          <p className="mt-1 text-sm">Events will appear here once live event data is received.</p>
+          <p className="text-lg font-medium text-gray-600">{t('noEntriesYet', language)}</p>
+          <p className="mt-1 text-sm">{t('eventsWillAppear', language)}</p>
           <button 
             onClick={() => {
                 setCategoryFilter('all');

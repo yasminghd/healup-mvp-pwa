@@ -2,27 +2,29 @@ import React from 'react';
 import { AppView } from '../types';
 import { BrainCircuit, Heart, House, NotebookPen, UserRound } from 'lucide-react';
 import { isViewEnabled } from '../config/features';
+import { t } from '../translations';
 
 type MobileTabBarProps = {
   currentView: AppView;
   onSelect: (view: AppView) => void;
+  language: string;
 };
 
 type TabItem = {
   id: AppView;
-  label: string;
+  labelKey: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
 };
 
 const tabItems: TabItem[] = [
-  { id: AppView.DASHBOARD, label: 'Home', icon: House },
-  { id: AppView.TRACKER, label: 'Track', icon: NotebookPen },
-  { id: AppView.INSIGHTS, label: 'Insights', icon: BrainCircuit },
-  { id: AppView.PAIN_PULSE, label: 'Community', icon: Heart },
-  { id: AppView.PROFILE, label: 'Profile', icon: UserRound },
+  { id: AppView.DASHBOARD, labelKey: 'home', icon: House },
+  { id: AppView.TRACKER, labelKey: 'track', icon: NotebookPen },
+  { id: AppView.INSIGHTS, labelKey: 'insights', icon: BrainCircuit },
+  { id: AppView.PAIN_PULSE, labelKey: 'community', icon: Heart },
+  { id: AppView.PROFILE, labelKey: 'profile', icon: UserRound },
 ];
 
-const MobileTabBar: React.FC<MobileTabBarProps> = ({ currentView, onSelect }) => {
+const MobileTabBar: React.FC<MobileTabBarProps> = ({ currentView, onSelect, language }) => {
   const visibleTabItems = tabItems.filter((item) => isViewEnabled(item.id));
 
   return (
@@ -45,7 +47,7 @@ const MobileTabBar: React.FC<MobileTabBarProps> = ({ currentView, onSelect }) =>
               }`}
             >
               <Icon size={19} className={isActive ? 'text-matcha-700' : 'text-gray-500'} />
-              <span className="mt-1.5 text-xs font-medium leading-tight">{item.label}</span>
+              <span className="mt-1.5 text-xs font-medium leading-tight">{t(item.labelKey, language)}</span>
             </button>
           );
         })}

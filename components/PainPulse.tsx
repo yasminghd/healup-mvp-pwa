@@ -1,34 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { Heart, HeartHandshake, Sparkles } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { HeartHandshake, Sparkles } from 'lucide-react';
 import PulseCircle from './painPulse/PulseCircle';
 import StateView from './painPulse/StateView';
+import { t } from '../translations';
 
 type PulseMode = 'request' | 'respond';
 type RequestState = 'idle' | 'sending' | 'received';
 type ResponseState = 'idle' | 'sending' | 'sent';
 
-const RESPONSE_PRESETS = [
-  'Sending you strength',
-  'Take it one breath at a time',
-  "You're held right now",
-  'Soft support coming your way',
-];
-
+const RESPONSE_PRESET_KEYS = ['pulsePreset1', 'pulsePreset2', 'pulsePreset3', 'pulsePreset4'];
 const RESPONSE_EMOJIS = ['🤍', '🌿', '🫶', '💚', '✨'];
 
-const PainPulse: React.FC = () => {
+interface PainPulseProps {
+  language: string;
+}
+
+const PainPulse: React.FC<PainPulseProps> = ({ language }) => {
   const [mode, setMode] = useState<PulseMode>('request');
   const [requestState, setRequestState] = useState<RequestState>('idle');
   const [responseState, setResponseState] = useState<ResponseState>('idle');
-  const [supportMessage, setSupportMessage] = useState(RESPONSE_PRESETS[0]);
+  const presetMessages = useMemo(() => RESPONSE_PRESET_KEYS.map((key) => t(key, language)), [language]);
+  const [supportMessage, setSupportMessage] = useState(presetMessages[0]);
   const [selectedEmoji, setSelectedEmoji] = useState(RESPONSE_EMOJIS[0]);
+
+  useEffect(() => {
+    setSupportMessage((current) => {
+      // If user hasn't customized, refresh to the new language's first preset
+      if (RESPONSE_PRESET_KEYS.some((key) => RESPONSE_PRESET_KEYS.map((k) => t(k, language)).includes(current)) || !current) {
+        return presetMessages[0];
+      }
+      return current;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
 
   useEffect(() => {
     if (requestState !== 'sending') {
       return;
     }
 
-    // TODO: Replace with realtime pulse-request API + websocket subscription.
     const timer = window.setTimeout(() => {
       setRequestState('received');
     }, 1800);
@@ -41,7 +51,6 @@ const PainPulse: React.FC = () => {
       return;
     }
 
-    // TODO: Replace with support-response API mutation and optimistic acknowledgement.
     const timer = window.setTimeout(() => {
       setResponseState('sent');
     }, 1100);
@@ -65,7 +74,7 @@ const PainPulse: React.FC = () => {
 
   const resetResponder = () => {
     setResponseState('idle');
-    setSupportMessage(RESPONSE_PRESETS[0]);
+    setSupportMessage(presetMessages[0]);
     setSelectedEmoji(RESPONSE_EMOJIS[0]);
   };
 
@@ -73,16 +82,16 @@ const PainPulse: React.FC = () => {
     if (requestState === 'received') {
       return (
         <StateView
-          eyebrow="Pain Pulse"
-          title="Pulse Sent"
-          description="No support signals yet. Once live support data is received, responses will appear here."
+          eyebrow={t('painPulse', language)}
+          title={t('pulseSent', language)}
+          description={t('noSupportSignals', language)}
         >
           <button
             type="button"
             onClick={resetRequester}
             className="healup-card-soft mt-5 rounded-full px-5 py-2.5 text-sm font-semibold text-matcha-700 transition-colors hover:bg-matcha-100"
           >
-            Send another pulse later
+            {t('sendAnotherLater', language)}
           </button>
         </StateView>
       );
@@ -91,16 +100,16 @@ const PainPulse: React.FC = () => {
     return (
       <div className="healup-card rounded-[32px] px-5 py-9 sm:px-8">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-matcha-600">Pain Pulse</p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">I&apos;m Here</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-matcha-600">{t('painPulse', language)}</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t('imHere', language)}</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-gray-600 sm:text-base">
-            Let others know you&apos;re in pain right now.
+            {t('letOthersKnow', language)}
           </p>
         </div>
 
         <PulseCircle
-          label={requestState === 'sending' ? 'Sending' : 'Tap'}
-          sublabel={requestState === 'sending' ? 'Quiet pulse in motion' : 'Press to send a pain pulse'}
+          label={requestState === 'sending' ? t('sendingLabel', language) : t('tapLabel', language)}
+          sublabel={requestState === 'sending' ? t('quietPulseInMotion', language) : t('pressToSendPulse', language)}
           onClick={handleSendPulse}
           disabled={requestState === 'sending'}
           isSending={requestState === 'sending'}
@@ -108,12 +117,12 @@ const PainPulse: React.FC = () => {
 
         <div className="text-center">
           <p className="text-base font-medium text-matcha-700">
-            {requestState === 'sending' ? 'Sending support request...' : 'A gentle signal. No feed, no comments, no noise.'}
+            {requestState === 'sending' ? t('sendingRequest', language) : t('gentleSignal', language)}
           </p>
           <p className="mt-2 text-sm text-gray-500">
             {requestState === 'sending'
-              ? 'The community will only see that someone needs quiet support right now.'
-              : 'When you press the circle, nearby supporters can respond anonymously.'}
+              ? t('communitySees', language)
+              : t('nearbySupporters', language)}
           </p>
         </div>
       </div>
@@ -124,12 +133,12 @@ const PainPulse: React.FC = () => {
     if (responseState === 'sent') {
       return (
         <StateView
-          eyebrow="Anonymous Support"
-          title="Support Sent"
-          description="They know you're with them."
+          eyebrow={t('anonymousSupport', language)}
+          title={t('supportSent', language)}
+          description={t('theyKnowYoure', language)}
         >
           <div className="healup-card-soft rounded-[24px] p-5 text-sm text-gray-700">
-            <p className="font-semibold text-matcha-700">Your note</p>
+            <p className="font-semibold text-matcha-700">{t('yourNote', language)}</p>
             <p className="mt-2 leading-relaxed">{selectedEmoji} {supportMessage}</p>
           </div>
           <button
@@ -137,7 +146,7 @@ const PainPulse: React.FC = () => {
             onClick={resetResponder}
             className="healup-card-soft mt-5 rounded-full px-5 py-2.5 text-sm font-semibold text-matcha-700 transition-colors hover:bg-matcha-100"
           >
-            Send support again
+            {t('sendSupportAgain', language)}
           </button>
         </StateView>
       );
@@ -145,15 +154,15 @@ const PainPulse: React.FC = () => {
 
     return (
       <StateView
-        eyebrow="Anonymous Support"
-        title="Be a quiet presence"
-        description="Someone in the community is hurting right now. You can send a calm signal of support without exposing your identity."
+        eyebrow={t('anonymousSupport', language)}
+        title={t('beQuietPresence', language)}
+        description={t('someoneHurting', language)}
       >
         <div className="healup-card-soft rounded-[30px] p-6">
           <div>
-            <p className="text-sm font-semibold text-gray-800">Choose a supportive note</p>
+            <p className="text-sm font-semibold text-gray-800">{t('chooseSupportiveNote', language)}</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {RESPONSE_PRESETS.map((preset) => {
+              {presetMessages.map((preset) => {
                 const isSelected = supportMessage === preset;
                 return (
                   <button
@@ -175,21 +184,21 @@ const PainPulse: React.FC = () => {
 
           <div className="mt-5">
             <label className="block text-sm font-semibold text-gray-800" htmlFor="pain-pulse-support-message">
-              Or write a short message
+              {t('orWriteShortMessage', language)}
             </label>
             <textarea
               id="pain-pulse-support-message"
               value={supportMessage}
               onChange={(e) => setSupportMessage(e.target.value.slice(0, 120))}
               rows={3}
-              placeholder="Write something gentle and encouraging..."
+              placeholder={t('writeSomethingGentle', language)}
               className="mt-3 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 outline-none transition-all focus:border-matcha-300 focus:ring-2 focus:ring-matcha-100"
             />
-            <p className="mt-2 text-xs text-gray-400">{supportMessage.length}/120 characters</p>
+            <p className="mt-2 text-xs text-gray-400">{supportMessage.length}/120 {t('charactersLabel', language)}</p>
           </div>
 
           <div className="mt-5">
-            <p className="text-sm font-semibold text-gray-800">Add a quiet emoji</p>
+            <p className="text-sm font-semibold text-gray-800">{t('addQuietEmoji', language)}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {RESPONSE_EMOJIS.map((emoji) => {
                 const isSelected = selectedEmoji === emoji;
@@ -203,7 +212,7 @@ const PainPulse: React.FC = () => {
                         ? 'border-matcha-200 bg-matcha-100 shadow-sm'
                         : 'border-gray-200 bg-white hover:border-matcha-100 hover:bg-matcha-50'
                     }`}
-                    aria-label={`Choose ${emoji}`}
+                    aria-label={`${emoji}`}
                   >
                     {emoji}
                   </button>
@@ -213,9 +222,9 @@ const PainPulse: React.FC = () => {
           </div>
 
           <div className="healup-card mt-5 rounded-[24px] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-matcha-600">Preview</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-matcha-600">{t('previewLabel', language)}</p>
             <p className="mt-2 text-sm leading-relaxed text-gray-700">
-              {selectedEmoji} {supportMessage || 'Your quiet note will appear here.'}
+              {selectedEmoji} {supportMessage || t('quietNoteAppear', language)}
             </p>
           </div>
 
@@ -231,9 +240,9 @@ const PainPulse: React.FC = () => {
             `}
           >
             <HeartHandshake size={18} />
-            {responseState === 'sending' ? 'Sending...' : 'Tap to Send Support'}
+            {responseState === 'sending' ? t('sendingDots', language) : t('tapToSendSupport', language)}
           </button>
-          <p className="mt-3 text-center text-sm text-gray-500">Your support is anonymous.</p>
+          <p className="mt-3 text-center text-sm text-gray-500">{t('supportAnonymous', language)}</p>
         </div>
       </StateView>
     );
@@ -244,8 +253,8 @@ const PainPulse: React.FC = () => {
       <div className="relative mx-auto max-w-5xl">
         <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Pain Pulse</h1>
-            <p className="text-gray-500">A quiet way to ask for support or send it back.</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('painPulse', language)}</h1>
+            <p className="text-gray-500">{t('painPulseSubtitle', language)}</p>
           </div>
           <div className="healup-card inline-flex w-fit rounded-full p-1">
             <button
@@ -255,7 +264,7 @@ const PainPulse: React.FC = () => {
                 mode === 'request' ? 'bg-[#fffdf9] text-matcha-700 shadow-sm' : 'text-gray-500'
               }`}
             >
-              Need support
+              {t('needSupportTab', language)}
             </button>
             <button
               type="button"
@@ -264,7 +273,7 @@ const PainPulse: React.FC = () => {
                 mode === 'respond' ? 'bg-[#fffdf9] text-matcha-700 shadow-sm' : 'text-gray-500'
               }`}
             >
-              Send support
+              {t('sendSupportTab', language)}
             </button>
           </div>
         </header>
@@ -274,26 +283,26 @@ const PainPulse: React.FC = () => {
 
           <aside className="space-y-4">
             <StateView
-              eyebrow="How it works"
-              title="Quiet by design"
-              description="Pain Pulse is intentionally minimal. It avoids public posting and keeps support soft, immediate, and anonymous."
+              eyebrow={t('howItWorks', language)}
+              title={t('quietByDesign', language)}
+              description={t('painPulseMinimal', language)}
             >
               <div className="space-y-3 text-sm text-gray-600">
                 <div className="healup-card-soft flex items-start gap-3 rounded-[24px] p-4">
                   <Sparkles size={16} className="mt-0.5 text-matcha-600" />
-                  <p>No names, no comments, and no visible reactions beyond calm support.</p>
+                  <p>{t('noNamesNoComments', language)}</p>
                 </div>
                 <div className="healup-card-soft flex items-start gap-3 rounded-[24px] p-4">
                   <Sparkles size={16} className="mt-0.5 text-matcha-600" />
-                  <p>Live support responses will appear here once live support data is received.</p>
+                  <p>{t('liveSupportResponses', language)}</p>
                 </div>
               </div>
             </StateView>
 
             <div className="healup-card-soft rounded-[30px] p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-matcha-600">Support Snapshot</p>
-              <p className="mt-3 text-sm font-semibold text-matcha-800">No entries yet.</p>
-              <p className="mt-1 text-sm text-gray-500">Support activity will appear here once live support data is received.</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-matcha-600">{t('supportSnapshot', language)}</p>
+              <p className="mt-3 text-sm font-semibold text-matcha-800">{t('noEntriesYet', language)}</p>
+              <p className="mt-1 text-sm text-gray-500">{t('supportActivityAppear', language)}</p>
             </div>
           </aside>
         </div>

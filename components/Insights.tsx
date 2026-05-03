@@ -53,21 +53,21 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
         <div className="h-full min-h-[420px] rounded-[28px] bg-[linear-gradient(180deg,rgba(248,244,235,0.12),rgba(248,244,235,0.06))] p-7 backdrop-blur-sm lg:p-8">
           <div className="flex items-center gap-3 mb-6 border-b border-white/20 pb-4">
             <BrainCircuit size={32} className="text-white" />
-            <h2 className="text-xl font-semibold">Weekly Analysis</h2>
+            <h2 className="text-xl font-semibold">{t('weeklyAnalysis', language)}</h2>
           </div>
 
           {loading ? (
             <div className="h-60">
               <GentleLoader
                 title={t('analyzing', language)}
-                subtitle="We’re looking for gentle patterns in your recent check-ins."
+                subtitle={t('gentlePatterns', language)}
                 tone="cream"
               />
             </div>
           ) : data.length === 0 ? (
             <div className="flex min-h-[260px] flex-col items-center justify-center text-center">
-              <p className="text-base font-semibold text-white">No entries yet.</p>
-              <p className="mt-2 max-w-md text-sm leading-6 text-matcha-50">Once you start tracking, your information will appear here.</p>
+              <p className="text-base font-semibold text-white">{t('noEntriesYet', language)}</p>
+              <p className="mt-2 max-w-md text-sm leading-6 text-matcha-50">{t('onceTracking', language)}</p>
             </div>
           ) : (
             <div className="prose prose-invert prose-p:text-matcha-50 prose-headings:text-white max-w-none">
@@ -85,8 +85,8 @@ const Insights: React.FC<InsightsProps> = ({ data, language }) => {
       </div>
       {data.length === 0 && (
         <div className="healup-card rounded-[28px] p-6 text-center">
-          <p className="text-sm font-semibold text-matcha-800">No insights yet.</p>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">Your symptom history will appear here once you add your first check-in.</p>
+          <p className="text-sm font-semibold text-matcha-800">{t('noInsightsYet', language)}</p>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">{t('symptomHistoryAppear', language)}</p>
         </div>
       )}
     </div>

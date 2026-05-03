@@ -148,42 +148,42 @@ const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile }) => 
         />
       </Section>
 
-      {/* Notifications (Mock) */}
+      {/* Notifications */}
       <Section title={t('notifications', language)} icon={Bell}>
-        <ToggleRow 
+        <ToggleRow
           label={t('dailyCheck', language)}
-          description="Remind me to log symptoms at 8:00 PM."
+          description={t('dailyCheckDesc', language)}
           checked={true}
           onChange={() => {}}
         />
         <div className="h-px bg-gray-100 my-1"></div>
-        <ToggleRow 
+        <ToggleRow
           label={t('commActivity', language)}
-          description="Notify me when a friend replies."
+          description={t('commActivityDesc', language)}
           checked={true}
           onChange={() => {}}
         />
       </Section>
 
-      {/* Appearance (Mock) */}
+      {/* Appearance */}
       <Section title={t('appearance', language)} icon={Moon}>
-         <ToggleRow 
+         <ToggleRow
           label={t('darkMode', language)}
-          description="Switch to a darker theme for eye comfort."
+          description={t('darkModeDesc', language)}
           checked={userProfile.themeMode === 'dark'}
           onChange={toggleThemeMode}
         />
         <div className="h-px bg-gray-100 my-2"></div>
         <ToggleRow
-          label="Rest Mode"
-          description="Show a simpler, lighter view on lower-energy days."
+          label={t('restModeLabel', language)}
+          description={t('restModeDesc', language)}
           checked={Boolean(userProfile.restMode)}
           onChange={toggleRestMode}
         />
         <div className="h-px bg-gray-100 my-2"></div>
         <ToggleRow
-          label="Reduced Motion"
-          description="Keep animations softer and more still."
+          label={t('reducedMotionLabel', language)}
+          description={t('reducedMotionDesc', language)}
           checked={Boolean(userProfile.reducedMotion)}
           onChange={toggleReducedMotion}
         />
@@ -199,17 +199,17 @@ const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile }) => 
              <button onClick={() => updateTextSize('extra-large')} className={`w-8 h-8 flex items-center justify-center rounded text-lg font-bold ${userProfile.textSize === 'extra-large' ? 'bg-white shadow-sm text-matcha-800' : 'text-gray-500'}`}>A</button>
            </div>
         </div>
-        <p className="text-xs text-gray-500">Comfortable is the default. Large and extra large make reading easier across the app.</p>
+        <p className="text-xs text-gray-500">{t('textSizeDesc', language)}</p>
       </Section>
 
       {/* About & Support */}
       <Section title={t('support', language)} icon={HelpCircle}>
         <div className="rounded-2xl border border-matcha-100 bg-matcha-50/60 p-4">
-          <p className="text-sm font-semibold text-matcha-800">Built with care</p>
-          <p className="mt-1 text-sm leading-6 text-gray-600">HealUp keeps privacy first and uses gentle language so harder days feel lighter to move through.</p>
+          <p className="text-sm font-semibold text-matcha-800">{t('builtWithCare', language)}</p>
+          <p className="mt-1 text-sm leading-6 text-gray-600">{t('healUpKeepsPrivacy', language)}</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-matcha-800">Private by default</span>
-            <span className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-matcha-800">Designed for people living with Sjogren's</span>
+            <span className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-matcha-800">{t('privateByDefault', language)}</span>
+            <span className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-matcha-800">{t('designedForBadge', language)}</span>
           </div>
         </div>
         <div className="h-px bg-gray-100 my-1"></div>

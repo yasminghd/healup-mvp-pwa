@@ -23,7 +23,7 @@ Mobile-first navigation:
 | Nav section | Label | View/component | Shown now | Status | Note |
 | --- | --- | --- | --- | --- | --- |
 | Main | Dashboard | `AppView.DASHBOARD` / `components/Dashboard.tsx` | Yes | `mvp-active` | Current home screen. |
-| Journal | Track Symptoms | `AppView.TRACKER` / `components/Tracker.tsx` | Yes | `mvp-active` | Core symptom logging flow with optional suggested and custom symptom management, plus adjustable limits for lifestyle sliders. |
+| Journal | Track Symptoms | `AppView.TRACKER` / `components/Tracker.tsx` | Yes | `mvp-active` | Core symptom logging flow starts empty and supports patient-defined symptom and lifestyle tracking. |
 | Journal | Lab Results | `AppView.LAB_RESULTS` / `components/LabResults.tsx` | Yes | `mvp-active` | Biomarker tracking page. |
 | Journal | AI Insights | `AppView.INSIGHTS` / `components/Insights.tsx` | No | `hidden-kept-for-later` | Hidden at this stage; code preserved. |
 | Connect | Pain Pulse | `AppView.PAIN_PULSE` / `components/PainPulse.tsx` | Yes | `mvp-active` | Quiet anonymous support feature for pain check-ins; shown as `Community` in the mobile bottom tab bar. |
@@ -41,13 +41,13 @@ Mobile-first navigation:
 
 | Feature name | Nav/tab label | Route/page/component | Current status | Part of MVP | Current state | Short note |
 | --- | --- | --- | --- | --- | --- | --- |
-| Dashboard Overview | Dashboard | `AppView.DASHBOARD` / `components/Dashboard.tsx` | `mvp-active` | Yes | visible | Top consistency/rewards panel, warm self-care progress messaging, gentle care reminders, one-metric cards, uncluttered charts, and a shared care-focused footer in the app shell. |
-| Symptom Tracker | Track Symptoms | `AppView.TRACKER` / `components/Tracker.tsx` | `mvp-active` | Yes | visible | Calendar-based daily logging with one-tap Sjögren’s symptom selection, optional suggested symptoms, custom symptom tracking, adjustable limits for quantifiable lifestyle fields, and a simplified rest-mode view. |
+| Dashboard Overview | Dashboard | `AppView.DASHBOARD` / `components/Dashboard.tsx` | `mvp-active` | Yes | visible | Top consistency/rewards panel, calm empty states before tracking starts, actual logged-day summary cards, and a shared care-focused footer in the app shell. |
+| Symptom Tracker | Track Symptoms | `AppView.TRACKER` / `components/Tracker.tsx` | `mvp-active` | Yes | visible | Calendar-based daily logging starts with no predefined symptoms or lifestyle measures; patients can define their own tracked items, limits, and notes. |
 | Rest Mode | None | `App.tsx`, `components/Dashboard.tsx`, `components/Tracker.tsx`, `components/Settings.tsx` | `mvp-active` | Yes | visible | Shared simplified-view toggle for lower-energy days that reduces cognitive load on the dashboard and tracker. |
 | Gentle Onboarding | None | `App.tsx`, `components/OnboardingModal.tsx` | `mvp-active` | Yes | visible | First-run onboarding uses four calm steps with skip options and stores completion locally on the device. |
 | Care Footer | None | `App.tsx` | `mvp-active` | Yes | visible | Shared footer provides simple navigation shortcuts, contact access, and a care-focused community message. |
 | Symptom Report Export | None | `components/Tracker.tsx` | `mvp-active` | Yes | visible | Exports symptom history as CSV. |
-| Lab Results | Lab Results | `AppView.LAB_RESULTS` / `components/LabResults.tsx` | `mvp-active` | Yes | visible | Manual lab logging, trend chart, recent history. |
+| Lab Results | Lab Results | `AppView.LAB_RESULTS` / `components/LabResults.tsx` | `mvp-active` | Yes | visible | Manual lab logging starts with no predefined lab history or selected tests; trend chart and recent history appear after patient-entered results. |
 | Lab Scan Import | Scan Result | `components/LabResults.tsx`, `services/geminiService.ts` | `mvp-active` | Yes | visible | AI image parsing for lab reports; depends on Gemini setup. |
 | Lab Results Export | Export CSV | `components/LabResults.tsx` | `mvp-active` | Yes | visible | Exports lab history as CSV. |
 | AI Insights | AI Insights | `AppView.INSIGHTS` / `components/Insights.tsx` | `hidden-kept-for-later` | No | hidden | Gemini-powered weekly analysis page remains implemented but is hidden at this stage. |

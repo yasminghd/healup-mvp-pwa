@@ -136,8 +136,8 @@ const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
               <div>
                 <h3 className="font-bold text-gray-900">{selectedFriend.name}</h3>
                 <p className="text-xs text-matcha-600 flex items-center gap-1">
-                   {selectedFriend.language} Speaker 
-                   {selectedFriend.language !== userProfile.language && <span className="bg-matcha-100 px-1.5 py-0.5 rounded text-[10px] font-bold">Translation On</span>}
+                   {selectedFriend.language} {t('languageSpeakerSuffix', language)}
+                   {selectedFriend.language !== userProfile.language && <span className="bg-matcha-100 px-1.5 py-0.5 rounded text-[10px] font-bold">{t('translationOnLabel', language)}</span>}
                 </p>
               </div>
             </div>
@@ -168,7 +168,7 @@ const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
                       {msg.translatedText && !isMe && (
                         <div className="mt-2 pt-2 border-t border-gray-100/50">
                            <p className="text-xs font-medium text-gray-500 flex items-center gap-1 mb-1">
-                             <Sparkles size={10} className="text-matcha-500" /> Translated to {userProfile.language}
+                             <Sparkles size={10} className="text-matcha-500" /> {t('translatedToLabel', language)} {userProfile.language}
                            </p>
                            <p className="text-matcha-800 font-medium">{msg.translatedText}</p>
                         </div>
@@ -188,7 +188,7 @@ const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
               <div className="flex justify-start">
                  <div className="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
                    <Loader2 size={14} className="animate-spin text-matcha-600" />
-                   <span className="text-xs text-gray-500">Translating incoming message...</span>
+                   <span className="text-xs text-gray-500">{t('translatingMessage', language)}</span>
                  </div>
               </div>
             )}
@@ -216,7 +216,7 @@ const Community: React.FC<CommunityProps> = ({ userProfile, friends }) => {
                </button>
             </div>
             <p className="text-[10px] text-center text-gray-400 mt-2 flex items-center justify-center gap-1">
-               <Globe size={10} /> Auto-translation active
+               <Globe size={10} /> {t('autoTranslationActive', language)}
             </p>
           </div>
           

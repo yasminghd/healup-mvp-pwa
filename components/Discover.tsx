@@ -188,7 +188,7 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
             </div>
             
             <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400">
-               {filteredPeople.length} potential matches found
+               {filteredPeople.length} {t('potentialMatchesFound', language)}
             </div>
           </div>
 
@@ -249,8 +249,8 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
              {filteredPeople.length === 0 && (
                <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                   <Search size={48} className="mx-auto mb-2 opacity-20" />
-                  <p className="font-medium text-gray-600">No entries yet.</p>
-                  <p className="mt-1 text-sm">People will appear here once live connection data is received.</p>
+                  <p className="font-medium text-gray-600">{t('noEntriesYet', language)}</p>
+                  <p className="mt-1 text-sm">{t('peopleWillAppear', language)}</p>
                </div>
              )}
           </div>
@@ -280,8 +280,8 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
            {DISCOVER_GROUPS.length === 0 && (
               <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                 <Tent size={48} className="mx-auto mb-2 opacity-20" />
-                <p className="font-medium text-gray-600">No entries yet.</p>
-                <p className="mt-1 text-sm">Groups will appear here once live community data is received.</p>
+                <p className="font-medium text-gray-600">{t('noEntriesYet', language)}</p>
+                <p className="mt-1 text-sm">{t('groupsWillAppear', language)}</p>
               </div>
            )}
         </div>

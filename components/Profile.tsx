@@ -52,7 +52,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
       setGeneratedImage(imageUrl);
       setFormData(prev => ({ ...prev, avatarUrl: imageUrl }));
     } else {
-      setError("Unable to generate avatar. Please try again.");
+      setError(t('unableGenerateAvatar', language));
     }
     
     setIsGenerating(false);
@@ -122,13 +122,13 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 </div>
                 {isEditing && (
                   <div className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-lg border border-gray-100 max-w-[250px]">
-                    <p className="text-xs font-semibold text-gray-500 mb-2 px-1">Generate New Look</p>
+                    <p className="text-xs font-semibold text-gray-500 mb-2 px-1">{t('generateNewLook', language)}</p>
                     <div className="flex gap-2">
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="e.g. green eyes, blue scarf..."
+                        placeholder={t('avatarDescPlaceholder', language)}
                         className="text-xs border border-gray-200 rounded-lg p-2 w-32 focus:outline-none focus:ring-1 focus:ring-matcha-500"
                       />
                       <button 
@@ -157,7 +157,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                     className="text-3xl font-bold text-gray-900 bg-transparent border-b-2 border-matcha-200 focus:border-matcha-500 outline-none w-full"
                   />
                 ) : (
-                  <h1 className="text-3xl font-bold text-gray-900">{formData.name || 'Your profile'}</h1>
+                  <h1 className="text-3xl font-bold text-gray-900">{formData.name || t('yourProfile', language)}</h1>
                 )}
                 
                 <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                       className="text-gray-500 font-medium bg-transparent border-b border-gray-200 focus:border-matcha-500 outline-none"
                     />
                   ) : (
-                    <span className="text-gray-500 font-medium">{formData.username || 'Add a username'}</span>
+                    <span className="text-gray-500 font-medium">{formData.username || t('addUsername', language)}</span>
                   )}
                 </div>
               </div>
@@ -211,18 +211,18 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
               {isEditing ? (
                  <div className="flex items-center gap-1">
                    {formData.role === 'Caregiver' && <span className="opacity-80 font-normal">{t('caringFor', language)}: </span>}
-                   <input 
-                    type="text" 
+                   <input
+                    type="text"
                     value={formData.condition}
                     onChange={(e) => setFormData({...formData, condition: e.target.value})}
                     className="bg-transparent border-none outline-none text-white font-bold placeholder-white/70 w-40"
-                    placeholder="Condition"
+                    placeholder={t('conditionPlaceholder', language)}
                   />
                  </div>
               ) : (
                 <span>
-                   {formData.role === 'Caregiver' && <span className="font-normal opacity-90">{t('roleCaregiver', language)} • {t('caringFor', language)} </span>} 
-                   {formData.condition || 'Add condition'}
+                   {formData.role === 'Caregiver' && <span className="font-normal opacity-90">{t('roleCaregiver', language)} • {t('caringFor', language)} </span>}
+                   {formData.condition || t('addCondition', language)}
                 </span>
               )}
             </div>
@@ -230,15 +230,15 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
             {/* Bio */}
             <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
               {isEditing ? (
-                <textarea 
+                <textarea
                   value={formData.bio}
                   onChange={(e) => setFormData({...formData, bio: e.target.value})}
                   className="w-full bg-transparent border-none outline-none text-gray-600 resize-none h-20"
-                  placeholder="Tell us a bit about yourself..."
+                  placeholder={t('bioPlaceholder', language)}
                 />
               ) : (
                 <p className="text-gray-600 leading-relaxed">
-                  {formData.bio || "No bio yet."}
+                  {formData.bio || t('noBioYet', language)}
                 </p>
               )}
             </div>
@@ -272,7 +272,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 />
               ) : (
                 <p className={`text-sm font-medium ${!formData.privacySettings.showLocation ? 'text-gray-300 italic' : 'text-gray-700'}`}>
-                  {formData.privacySettings.showLocation ? (formData.location || 'Not added yet') : 'Hidden'}
+                  {formData.privacySettings.showLocation ? (formData.location || t('notAddedYet', language)) : t('hiddenLabel', language)}
                 </p>
               )}
             </div>
@@ -296,7 +296,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 />
               ) : (
                 <p className={`text-sm font-medium ${!formData.privacySettings.showAge ? 'text-gray-300 italic' : 'text-gray-700'}`}>
-                  {formData.privacySettings.showAge ? (formData.age || 'Not added yet') : 'Hidden'}
+                  {formData.privacySettings.showAge ? (formData.age || t('notAddedYet', language)) : t('hiddenLabel', language)}
                 </p>
               )}
             </div>
@@ -312,21 +312,21 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 )}
               </div>
               {isEditing ? (
-                <select 
-                  value={formData.gender} 
+                <select
+                  value={formData.gender}
                   onChange={(e) => setFormData({...formData, gender: e.target.value})}
                   className="w-full p-2 bg-gray-50 rounded-lg text-sm border border-gray-100 outline-none"
                 >
-                  <option value="">Select</option>
-                  <option value="Female">Female</option>
-                  <option value="Male">Male</option>
-                  <option value="Non-binary">Non-binary</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
+                  <option value="">{t('selectGender', language)}</option>
+                  <option value="Female">{t('genderFemale', language)}</option>
+                  <option value="Male">{t('genderMale', language)}</option>
+                  <option value="Non-binary">{t('genderNonBinary', language)}</option>
+                  <option value="Other">{t('genderOther', language)}</option>
+                  <option value="Prefer not to say">{t('genderPreferNotSay', language)}</option>
                 </select>
               ) : (
                 <p className={`text-sm font-medium ${!formData.privacySettings.showGender ? 'text-gray-300 italic' : 'text-gray-700'}`}>
-                  {formData.privacySettings.showGender ? (formData.gender || 'Not added yet') : 'Hidden'}
+                  {formData.privacySettings.showGender ? (formData.gender || t('notAddedYet', language)) : t('hiddenLabel', language)}
                 </p>
               )}
             </div>
@@ -355,7 +355,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                 </span>
               ))}
               {formData.interests.length === 0 && !isEditing && (
-                <span className="text-gray-400 text-sm italic">No interests added yet.</span>
+                <span className="text-gray-400 text-sm italic">{t('noInterestsYet', language)}</span>
               )}
             </div>
 
@@ -366,7 +366,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                   value={newInterest}
                   onChange={(e) => setNewInterest(e.target.value)}
                   onKeyDown={addInterest}
-                  placeholder="Add interest and press Enter"
+                  placeholder={t('addInterestPlaceholder', language)}
                   className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-matcha-400 outline-none transition-all"
                 />
                 <button 
@@ -380,7 +380,7 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
             
             {isEditing && (
               <p className="text-xs text-gray-400 mt-2">
-                Add only what you want visible on your profile.
+                {t('addOnlyVisible', language)}
               </p>
             )}
           </div>
@@ -411,8 +411,8 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
                </div>
              ) : (
                <div className="text-center py-6 text-gray-400">
-                 <p className="text-sm font-medium text-gray-600">No entries yet.</p>
-                 <p className="mt-1 text-sm">Friends will appear here once you add a connection.</p>
+                 <p className="text-sm font-medium text-gray-600">{t('noEntriesYet', language)}</p>
+                 <p className="mt-1 text-sm">{t('friendsWillAppear', language)}</p>
                </div>
              )}
           </div>

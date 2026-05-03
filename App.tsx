@@ -21,6 +21,7 @@ import OnboardingModal from './components/OnboardingModal';
 import { AppView, DailyRecord, UserProfile, LabResult, Friend } from './types';
 import { getDefaultEnabledView, getSafeView, isViewEnabled } from './config/features';
 import { HeartHandshake, Leaf, ShieldCheck } from 'lucide-react';
+import { t } from './translations';
 
 const THEME_STORAGE_KEY = 'healup-theme-mode';
 const TEXT_SIZE_STORAGE_KEY = 'healup-text-size';
@@ -183,7 +184,7 @@ const App: React.FC = () => {
       case AppView.INSIGHTS:
         return <Insights data={data} language={language} />;
       case AppView.PAIN_PULSE:
-        return <PainPulse />;
+        return <PainPulse language={language} />;
       case AppView.EXPERTS:
         return <Experts language={language} />;
       case AppView.COMMUNITY:
@@ -229,11 +230,11 @@ const App: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 rounded-full bg-matcha-50 px-3 py-2 text-xs font-semibold text-matcha-800">
                 <ShieldCheck size={14} />
-                Privacy-first by default
+                {t('privacyFirstBadge', language)}
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-[#efe6d6] px-3 py-2 text-xs font-semibold text-[#6a8963]">
                 <Leaf size={14} />
-                Designed for people living with Sjogren's
+                {t('designedForBadge', language)}
               </span>
             </div>
 
@@ -247,7 +248,7 @@ const App: React.FC = () => {
               }`}
             >
               <Leaf size={16} />
-              {userProfile.restMode ? 'Rest mode is on' : 'Turn on rest mode'}
+              {userProfile.restMode ? t('restModeOn', language) : t('turnOnRestMode', language)}
             </button>
           </div>
           <div className="healup-divider" />
@@ -255,8 +256,8 @@ const App: React.FC = () => {
           <footer className="healup-card healup-reveal rounded-[30px] px-6 py-6 lg:px-7 lg:py-7">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <p className="text-sm font-semibold text-matcha-800">Made with care for the Sjogren&apos;s community.</p>
-                <p className="mt-1 text-sm text-gray-500">A calm space for check-ins, patterns, and support that stays gentle to use on lower-energy days.</p>
+                <p className="text-sm font-semibold text-matcha-800">{t('madeWithCare', language)}</p>
+                <p className="mt-1 text-sm text-gray-500">{t('calmSpace', language)}</p>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -265,20 +266,20 @@ const App: React.FC = () => {
                   onClick={() => handleViewChange(AppView.SETTINGS)}
                   className="min-h-[44px] rounded-2xl border border-matcha-100 bg-[#fffdf9] px-4 py-2 text-sm font-semibold text-matcha-800 transition-colors hover:bg-matcha-50"
                 >
-                  Settings
+                  {t('settings', language)}
                 </button>
                 <button
                   type="button"
                   onClick={() => handleViewChange(AppView.RESEARCH)}
                   className="min-h-[44px] rounded-2xl border border-matcha-100 bg-[#fffdf9] px-4 py-2 text-sm font-semibold text-matcha-800 transition-colors hover:bg-matcha-50"
                 >
-                  Research & News
+                  {t('research', language)}
                 </button>
                 <a
                   href="mailto:admin@healup-health.com?subject=HealUp%20Support"
                   className="inline-flex min-h-[44px] items-center rounded-2xl border border-matcha-100 bg-[#fffdf9] px-4 py-2 text-sm font-semibold text-matcha-800 transition-colors hover:bg-matcha-50"
                 >
-                  Contact
+                  {t('contact', language)}
                 </a>
               </div>
             </div>
@@ -292,12 +293,13 @@ const App: React.FC = () => {
         className="fixed bottom-28 right-4 z-50 flex min-h-[56px] items-center gap-2 rounded-full border border-matcha-100 bg-[#fbf8f1]/94 px-4 py-3 text-sm font-semibold text-matcha-800 shadow-sm backdrop-blur-md transition-colors hover:bg-matcha-50 lg:bottom-6 lg:right-6"
       >
         <HeartHandshake size={18} className="text-matcha-700" />
-        <span>SOS</span>
+        <span>{t('sos', language)}</span>
       </button>
 
-      <MobileTabBar currentView={currentView} onSelect={handleViewChange} />
+      <MobileTabBar currentView={currentView} onSelect={handleViewChange} language={language} />
       {showOnboarding && (
         <OnboardingModal
+          language={language}
           onClose={() => {
             window.localStorage.setItem(ONBOARDING_STORAGE_KEY, 'true');
             setShowOnboarding(false);

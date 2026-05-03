@@ -61,8 +61,8 @@ const Groups: React.FC<GroupsProps> = ({ language }) => {
         {GROUPS.length === 0 && (
           <div className="md:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center text-gray-500">
             <Users size={40} className="mx-auto mb-3 opacity-30" />
-            <p className="font-medium text-gray-700">No entries yet.</p>
-            <p className="mt-1 text-sm">Groups will appear here once live community data is received.</p>
+            <p className="font-medium text-gray-700">{t('noEntriesYet', language)}</p>
+            <p className="mt-1 text-sm">{t('groupsWillAppear', language)}</p>
           </div>
         )}
 
@@ -72,7 +72,7 @@ const Groups: React.FC<GroupsProps> = ({ language }) => {
            </div>
            <div>
              <h3 className="font-bold text-gray-800">{t('createGroup', language)}</h3>
-             <p className="text-xs text-gray-500 mt-1 max-w-[200px]">Start a new community for a specific topic or region.</p>
+             <p className="text-xs text-gray-500 mt-1 max-w-[200px]">{t('startNewCommunity', language)}</p>
            </div>
         </button>
       </div>
