@@ -204,7 +204,7 @@ const Discover: React.FC<DiscoverProps> = ({ userProfile }) => {
                           <div>
                              <h3 className="font-bold text-gray-900 flex items-center gap-1">
                                {person.name}
-                               {person.role === 'Caregiver' && <span title="Caregiver"><HeartHandshake size={14} className="text-blue-500" /></span>}
+                               {person.role === 'Caregiver' && <span title="Caregiver"><HeartHandshake size={14} className="text-lavender-500" /></span>}
                              </h3>
                              <p className="text-xs text-matcha-600 font-semibold">{person.condition}</p>
                              <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">

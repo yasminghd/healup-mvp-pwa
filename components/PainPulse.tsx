@@ -249,7 +249,7 @@ const PainPulse: React.FC<PainPulseProps> = ({ language }) => {
   };
 
   return (
-    <div className="healup-reveal relative min-h-[calc(100vh-140px)] overflow-hidden rounded-[36px] bg-gradient-to-br from-matcha-50 via-[#f5f0e6] to-[#eef3e8] p-5 shadow-sm ring-1 ring-matcha-100 sm:p-8">
+    <div className="healup-reveal relative min-h-[calc(100vh-140px)] overflow-hidden rounded-[36px] bg-matcha-50/60 p-5 shadow-sm ring-1 ring-matcha-100 sm:p-8">
       <div className="relative mx-auto max-w-5xl">
         <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>

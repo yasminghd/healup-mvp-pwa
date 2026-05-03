@@ -22,7 +22,7 @@ const PulseCircle: React.FC<PulseCircleProps> = ({
 
   return (
     <div className="relative flex items-center justify-center py-10 sm:py-14">
-      <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-matcha-200/55 via-[#fffdf9] to-[#efe4d1]/45 blur-3xl" />
+      <div className="healup-pulse-glow absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
       {[0, 1, 2].map((index) => (
         <span
           key={index}
@@ -43,14 +43,13 @@ const PulseCircle: React.FC<PulseCircleProps> = ({
         onClick={onClick}
         disabled={disabled}
         className={`
-          relative z-10 flex h-48 w-48 flex-col items-center justify-center rounded-full border border-white/80
-          bg-[linear-gradient(180deg,rgba(255,253,249,0.96),rgba(239,243,232,0.9))] text-center shadow-[0_24px_80px_rgba(106,137,99,0.18)] backdrop-blur-sm
+          healup-pulse-button relative z-10 flex h-48 w-48 flex-col items-center justify-center rounded-full text-center
           transition-all duration-300 sm:h-56 sm:w-56
           ${disabled ? 'cursor-default opacity-90' : 'hover:scale-[1.02] active:scale-95'}
         `}
       >
-        <span className="text-3xl font-bold tracking-tight text-matcha-800 sm:text-4xl">{label}</span>
-        <span className="mt-2 max-w-[9rem] text-sm leading-relaxed text-matcha-700 sm:max-w-[10rem]">{sublabel}</span>
+        <span className="healup-pulse-label text-3xl font-bold tracking-tight sm:text-4xl">{label}</span>
+        <span className="healup-pulse-sublabel mt-2 max-w-[9rem] text-sm leading-relaxed sm:max-w-[10rem]">{sublabel}</span>
       </button>
     </div>
   );

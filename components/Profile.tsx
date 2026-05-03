@@ -203,8 +203,8 @@ const Profile: React.FC<ProfileProps> = ({ userProfile, onUpdateProfile, friends
             )}
 
             <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm ${
-                formData.role === 'Caregiver' 
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' 
+                formData.role === 'Caregiver'
+                  ? 'bg-gradient-to-r from-lavender-500 to-lavender-600 text-white'
                   : 'bg-gradient-to-r from-matcha-500 to-matcha-600 text-white'
             }`}>
               {formData.role === 'Caregiver' ? <HeartHandshake size={14} /> : <Sparkles size={14} />}

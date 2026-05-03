@@ -374,6 +374,16 @@ export const translations: Record<string, Record<string, string>> = {
     translatingMessage: 'Translating incoming message...',
     autoTranslationActive: 'Auto-translation active',
     translatedToLabel: 'Translated to',
+    // Voice input
+    voiceCardTitle: 'Speak your check-in',
+    voiceCardSubtitle: "Tap and tell us how you're feeling. We'll add it to your notes — no typing needed.",
+    voiceTapToSpeak: 'Tap to speak',
+    voiceListening: 'Listening...',
+    voiceStop: 'Stop listening',
+    voiceLiveHint: "Take your time. We're listening.",
+    voicePermissionNeeded: 'Microphone access is off. You can enable it in your browser settings, then tap again.',
+    // Sidebar
+    noConditionAdded: 'No condition added',
   },
   French: {
     dashboard: 'Tableau de bord',
@@ -730,6 +740,15 @@ export const translations: Record<string, Record<string, string>> = {
     translatingMessage: 'Traduction du message entrant...',
     autoTranslationActive: 'Traduction auto active',
     translatedToLabel: 'Traduit en',
+    // Voice input
+    voiceCardTitle: 'Dites votre bilan',
+    voiceCardSubtitle: 'Appuyez et racontez comment vous vous sentez. Nous l\'ajouterons à vos notes — sans rien taper.',
+    voiceTapToSpeak: 'Appuyez pour parler',
+    voiceListening: 'Écoute en cours...',
+    voiceStop: 'Arrêter l\'écoute',
+    voiceLiveHint: 'Prenez votre temps. On vous écoute.',
+    voicePermissionNeeded: 'L\'accès au microphone est désactivé. Activez-le dans les paramètres du navigateur, puis réessayez.',
+    noConditionAdded: 'Aucune condition ajoutée',
   },
   German: {
     dashboard: 'Dashboard',
@@ -1086,6 +1105,15 @@ export const translations: Record<string, Record<string, string>> = {
     translatingMessage: 'Übersetze eingehende Nachricht...',
     autoTranslationActive: 'Auto-Übersetzung aktiv',
     translatedToLabel: 'Übersetzt nach',
+    // Voice input
+    voiceCardTitle: 'Sprechen Sie Ihren Check-in',
+    voiceCardSubtitle: 'Tippen Sie und sagen Sie, wie Sie sich fühlen. Wir fügen es Ihren Notizen hinzu — ohne Tippen.',
+    voiceTapToSpeak: 'Tippen zum Sprechen',
+    voiceListening: 'Höre zu...',
+    voiceStop: 'Aufhören zu hören',
+    voiceLiveHint: 'Lassen Sie sich Zeit. Wir hören zu.',
+    voicePermissionNeeded: 'Mikrofonzugriff ist aus. Aktivieren Sie ihn in den Browser-Einstellungen und tippen Sie erneut.',
+    noConditionAdded: 'Keine Erkrankung angegeben',
   },
   Italian: {
     dashboard: 'Dashboard',
@@ -1442,6 +1470,15 @@ export const translations: Record<string, Record<string, string>> = {
     translatingMessage: 'Traduzione del messaggio in arrivo...',
     autoTranslationActive: 'Traduzione automatica attiva',
     translatedToLabel: 'Tradotto in',
+    // Voice input
+    voiceCardTitle: 'Racconta il tuo check-in',
+    voiceCardSubtitle: 'Tocca e dicci come ti senti. Lo aggiungeremo alle tue note — senza digitare.',
+    voiceTapToSpeak: 'Tocca per parlare',
+    voiceListening: 'In ascolto...',
+    voiceStop: 'Smetti di ascoltare',
+    voiceLiveHint: 'Prenditi il tuo tempo. Ti stiamo ascoltando.',
+    voicePermissionNeeded: 'L\'accesso al microfono è disattivato. Abilitalo nelle impostazioni del browser e riprova.',
+    noConditionAdded: 'Nessuna condizione aggiunta',
   },
   Romansh: {
     dashboard: 'Survista',
@@ -1798,6 +1835,15 @@ export const translations: Record<string, Record<string, string>> = {
     translatingMessage: 'Translatar messadi entrant...',
     autoTranslationActive: 'Auto-translaziun activa',
     translatedToLabel: 'Translatà en',
+    // Voice input
+    voiceCardTitle: 'Discurra tes check-in',
+    voiceCardSubtitle: 'Tutga e di co ti ta sentas. Nus agiuntain quai a tias notas — senza scriver.',
+    voiceTapToSpeak: 'Tutgar per discurrer',
+    voiceListening: 'Ascult...',
+    voiceStop: 'Fermar dad ascutar',
+    voiceLiveHint: 'Prenda tes temp. Nus ascultain.',
+    voicePermissionNeeded: 'L\'access al microfon è deactivà. Activescha el en ils parameters dal navigatur ed emprova anc ina giada.',
+    noConditionAdded: 'Nagina cundiziun agiuntada',
   }
 };
 

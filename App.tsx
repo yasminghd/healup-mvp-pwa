@@ -20,7 +20,7 @@ import MobileTabBar from './components/MobileTabBar';
 import OnboardingModal from './components/OnboardingModal';
 import { AppView, DailyRecord, UserProfile, LabResult, Friend } from './types';
 import { getDefaultEnabledView, getSafeView, isViewEnabled } from './config/features';
-import { HeartHandshake, Leaf, ShieldCheck } from 'lucide-react';
+import { HeartHandshake, Leaf } from 'lucide-react';
 import { t } from './translations';
 
 const THEME_STORAGE_KEY = 'healup-theme-mode';
@@ -118,32 +118,6 @@ const App: React.FC = () => {
   }, [userProfile.reducedMotion]);
 
   useEffect(() => {
-    if (userProfile.reducedMotion) {
-      document.documentElement.style.setProperty('--healup-scroll-y', '0px');
-      return;
-    }
-
-    let frame = 0;
-    const updateScrollVariable = () => {
-      frame = 0;
-      document.documentElement.style.setProperty('--healup-scroll-y', `${window.scrollY}px`);
-    };
-
-    const handleScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(updateScrollVariable);
-    };
-
-    updateScrollVariable();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [userProfile.reducedMotion]);
-
-  useEffect(() => {
     window.localStorage.setItem(REST_MODE_STORAGE_KEY, String(Boolean(userProfile.restMode)));
   }, [userProfile.restMode]);
 
@@ -207,7 +181,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-matcha-50 via-[#f5f0e6] to-[#eef3e8]">
+    <div className="min-h-screen flex">
       <Sidebar 
         currentView={currentView} 
         setCurrentView={handleViewChange}
@@ -217,41 +191,21 @@ const App: React.FC = () => {
       />
       
       <main className="relative mt-16 flex-1 overflow-x-hidden p-5 pb-32 lg:mt-0 lg:p-10 lg:pb-14">
-        {!userProfile.reducedMotion && (
-          <>
-            <div className="healup-parallax-layer healup-parallax-orb pointer-events-none absolute right-[-4rem] top-12 h-40 w-40 rounded-full opacity-80" style={{ ['--parallax-speed' as string]: '0.045' }} />
-            <div className="healup-parallax-layer healup-parallax-orb pointer-events-none absolute left-[-3rem] top-[28rem] h-28 w-28 rounded-full opacity-70" style={{ ['--parallax-speed' as string]: '-0.03' }} />
-            <Leaf className="healup-parallax-layer healup-parallax-leaf pointer-events-none absolute right-12 top-32 h-10 w-10 rotate-12" style={{ ['--parallax-speed' as string]: '0.055' }} />
-            <Leaf className="healup-parallax-layer healup-parallax-leaf pointer-events-none absolute left-10 top-[34rem] h-8 w-8 -rotate-[18deg]" style={{ ['--parallax-speed' as string]: '-0.04' }} />
-          </>
-        )}
         <div className="relative mx-auto max-w-6xl space-y-10">
-          <div className="healup-card healup-reveal mb-2 flex flex-col gap-4 rounded-[30px] p-5 lg:flex-row lg:items-center lg:justify-between lg:p-6">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-2 rounded-full bg-matcha-50 px-3 py-2 text-xs font-semibold text-matcha-800">
-                <ShieldCheck size={14} />
-                {t('privacyFirstBadge', language)}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#efe6d6] px-3 py-2 text-xs font-semibold text-[#6a8963]">
-                <Leaf size={14} />
-                {t('designedForBadge', language)}
-              </span>
-            </div>
-
+          <div className="mb-2 flex justify-end">
             <button
               type="button"
               onClick={() => setUserProfile((prev) => ({ ...prev, restMode: !prev.restMode }))}
-              className={`inline-flex min-h-[48px] items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-semibold transition-all hover:scale-[1.01] ${
+              className={`inline-flex min-h-[44px] items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all hover:scale-[1.01] ${
                 userProfile.restMode
                   ? 'border-matcha-200 bg-matcha-100 text-matcha-900'
-                  : 'border-matcha-100 bg-[#fffdf9] text-matcha-800 hover:bg-matcha-50'
+                  : 'border-matcha-100 bg-[#fffdf9]/80 text-matcha-700 hover:bg-matcha-50'
               }`}
             >
-              <Leaf size={16} />
+              <Leaf size={14} />
               {userProfile.restMode ? t('restModeOn', language) : t('turnOnRestMode', language)}
             </button>
           </div>
-          <div className="healup-divider" />
           {renderView()}
           <footer className="healup-card healup-reveal rounded-[30px] px-6 py-6 lg:px-7 lg:py-7">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">

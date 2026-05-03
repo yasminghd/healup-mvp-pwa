@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { DailyRecord, QuantifiableEntry, SymptomEntry, TrackedQuantifiableMetricDefinition, TrackedSymptomDefinition } from '../types';
 import { Activity, AlertCircle, Brain, Calendar as CalendarIcon, Check, ChevronLeft, ChevronRight, Cloud, Coffee, Download, Droplets, Eye, Footprints, HeartPulse, Leaf, Moon, Plus, Save, Settings2, Sparkles, SunMedium, X } from 'lucide-react';
 import { t } from '../translations';
+import VoiceNoteButton from './VoiceNoteButton';
 
 interface TrackerProps {
   existingData: DailyRecord[];
@@ -244,6 +245,7 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
               {saved && <div className="healup-saved-toast healup-reveal flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium shadow-sm"><Check size={16} /><span>{t('savedGently', language)}</span></div>}
             </div>
             <div className="healup-card-soft mb-8 rounded-[26px] p-5"><p className="text-sm font-medium text-matcha-800">{t('trackerEncouragement', language)}</p><p className="mt-1 text-sm text-gray-500">{t('trackerAutosaveNote', language)}</p></div>
+            <VoiceNoteButton language={language} onTranscript={(text) => setForm((current) => ({ ...current, notes: current.notes ? `${current.notes} ${text}` : text }))} />
             {restMode && <div className="healup-card mb-8 rounded-[26px] p-5"><p className="text-sm font-semibold text-matcha-800">Rest mode keeps this lighter.</p><p className="mt-1 text-sm leading-6 text-gray-500">You can still manage what appears here, but the main logging surfaces stay simple.</p></div>}
             <form onSubmit={(e) => { e.preventDefault(); persist(); }} className="space-y-10">
               <div>

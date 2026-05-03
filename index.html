@@ -10,6 +10,7 @@
         theme: {
           extend: {
             colors: {
+              // Sage green (primary calm accent)
               matcha: {
                 50: '#f8f4eb',
                 100: '#f1ebdf',
@@ -21,7 +22,52 @@
                 700: '#6a8963',
                 800: '#556b4a',
                 900: '#3d4b3e',
-              }
+              },
+              // Soft sky blue — reserved for trends, quiet info, focus accents
+              sky: {
+                50: '#f1f6fa',
+                100: '#dde9f1',
+                200: '#bdd2de',
+                300: '#94b6c5',
+                400: '#7099ad',
+                500: '#587f93',
+                600: '#476878',
+                700: '#3a5462',
+                800: '#2e424d',
+                900: '#1d2a33',
+              },
+              // Muted lavender — caregiver tones, support moments, secondary highlights
+              lavender: {
+                50: '#f5f3ff',
+                100: '#ede9fe',
+                200: '#ddd6fe',
+                300: '#c4b5fd',
+                400: '#a78bfa',
+                500: '#8b5cf6',
+                600: '#7c3aed',
+                700: '#6d28d9',
+                800: '#5b21b6',
+                900: '#4c1d95',
+              },
+              // Warm beige — backgrounds, soft cards, restful surfaces
+              beige: {
+                50: '#fdfaf4',
+                100: '#f4ebd8',
+                200: '#efe6d6',
+                300: '#e4d3b4',
+                400: '#cab490',
+                500: '#a8956d',
+                600: '#85704f',
+                700: '#5e4f37',
+              },
+              // Dark mode foundations
+              ink: {
+                900: '#0f172a', // deep navy
+                800: '#111c2f',
+                700: '#1e293b', // charcoal
+                600: '#293346',
+                500: '#3b475c',
+              },
             },
             fontFamily: {
               sans: ['Source Sans 3', 'Segoe UI', 'sans-serif'],
@@ -117,20 +163,7 @@
       .healup-button-secondary:active {
         transform: scale(0.99);
       }
-      .healup-parallax-layer {
-        transform: translate3d(0, calc(var(--healup-scroll-y, 0px) * var(--parallax-speed, 0.06)), 0);
-        transition: transform 180ms ease-out;
-        will-change: transform;
-      }
-      .healup-parallax-orb {
-        background: radial-gradient(circle at 30% 30%, rgba(255, 253, 249, 0.88), rgba(168, 195, 158, 0.18) 52%, rgba(194, 169, 128, 0.08) 100%);
-        filter: blur(2px);
-      }
-      .healup-parallax-leaf {
-        color: rgba(106, 137, 99, 0.26);
-        filter: drop-shadow(0 14px 24px rgba(106, 137, 99, 0.12));
-      }
-      .healup-focus:focus-visible,
+.healup-focus:focus-visible,
       button:focus-visible,
       input:focus-visible,
       textarea:focus-visible,
@@ -148,6 +181,143 @@
         transform-origin: center;
         animation: healupLeafWiggle 2.6s ease-in-out infinite;
       }
+      .healup-pulse-glow {
+        background: radial-gradient(circle at 30% 30%, rgba(255, 253, 249, 0.92), rgba(168, 195, 158, 0.32) 55%, rgba(239, 228, 209, 0.45) 100%);
+      }
+      .healup-pulse-button {
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        background-image: linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(239, 243, 232, 0.9));
+        box-shadow: 0 24px 80px rgba(106, 137, 99, 0.18);
+        backdrop-filter: blur(6px);
+      }
+      .healup-pulse-label { color: #556b4a; }
+      .healup-pulse-sublabel { color: #6a8963; }
+      body.theme-dark .healup-pulse-glow {
+        background: radial-gradient(circle at 30% 30%, rgba(74, 222, 128, 0.30), rgba(94, 234, 212, 0.18) 55%, rgba(15, 23, 42, 0.05) 100%);
+      }
+      body.theme-dark .healup-pulse-button {
+        border: 1px solid rgba(74, 222, 128, 0.4);
+        background-image: linear-gradient(180deg, #4ade80, #22c55e);
+        box-shadow: 0 24px 80px rgba(74, 222, 128, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+      body.theme-dark .healup-pulse-label { color: #052e16; text-shadow: none; }
+      body.theme-dark .healup-pulse-sublabel { color: #14532d; }
+
+      /* ─── Sidebar (light + dark) ─── */
+      .healup-sidebar {
+        background-color: #fbf8f1;
+        border-right: 1px solid rgba(228, 221, 206, 0.7);
+        box-shadow: 0 0 24px rgba(80, 87, 77, 0.04);
+      }
+      .healup-sidebar-divider-bottom { border-bottom: 1px solid rgba(228, 221, 206, 0.5); }
+      .healup-sidebar-divider-top { border-top: 1px solid rgba(228, 221, 206, 0.5); }
+      .healup-sidebar-wordmark { color: #556b4a; }
+      .healup-sidebar-mobile-header {
+        background-color: rgba(251, 248, 241, 0.95);
+        border-bottom: 1px solid rgba(228, 221, 206, 0.7);
+        color: #556b4a;
+      }
+      .healup-sidebar-mobile-toggle { color: #556b4a; }
+
+      /* Nav items */
+      .healup-sidebar-item {
+        background-color: transparent;
+        color: #6b7d6b;
+      }
+      .healup-sidebar-item .healup-sidebar-icon { color: #97a597; transition: color 200ms ease; }
+      .healup-sidebar-item:hover {
+        background-color: rgba(241, 235, 223, 0.65);
+        color: #3d4b3e;
+      }
+      .healup-sidebar-item:hover .healup-sidebar-icon { color: #6a8963; }
+      .healup-sidebar-item-active {
+        background-color: rgba(168, 195, 158, 0.18);
+        color: #3d4b3e;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(106, 137, 99, 0.10);
+      }
+      .healup-sidebar-item-active .healup-sidebar-icon { color: #6a8963; }
+      .healup-sidebar-active-bar { background: linear-gradient(180deg, #7ea96b, #6a8963); }
+
+      /* Bottom profile */
+      .healup-sidebar-profile {
+        background-color: transparent;
+      }
+      .healup-sidebar-profile:hover {
+        background-color: rgba(168, 195, 158, 0.14);
+      }
+      .healup-sidebar-avatar {
+        background: linear-gradient(135deg, #a8c39e 0%, #7ea96b 100%);
+        color: #1f2a1c;
+        box-shadow: 0 4px 14px rgba(126, 169, 107, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+      .healup-sidebar-profile-name { color: #3d4b3e; }
+      .healup-sidebar-profile-meta { color: #97a597; }
+      .healup-sidebar-profile-chevron { color: #97a597; transition: color 200ms ease, transform 200ms ease; }
+      .healup-sidebar-profile:hover .healup-sidebar-profile-chevron {
+        color: #6a8963;
+        transform: translateX(2px);
+      }
+
+      /* Dark mode sidebar */
+      body.theme-dark .healup-sidebar {
+        background-color: #0f172a !important;
+        border-right: 1px solid rgba(148, 163, 184, 0.10);
+        box-shadow: 0 0 32px rgba(2, 6, 23, 0.4);
+      }
+      body.theme-dark .healup-sidebar-divider-bottom { border-bottom-color: rgba(148, 163, 184, 0.10); }
+      body.theme-dark .healup-sidebar-divider-top { border-top-color: rgba(148, 163, 184, 0.10); }
+      body.theme-dark .healup-sidebar-wordmark {
+        color: #f1f5f9;
+        text-shadow: 0 0 16px rgba(74, 222, 128, 0.25);
+      }
+      body.theme-dark .healup-sidebar-mobile-header {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+        border-bottom-color: rgba(148, 163, 184, 0.12);
+        color: #e2e8f0;
+      }
+      body.theme-dark .healup-sidebar-mobile-toggle { color: #cbd5e1; }
+
+      body.theme-dark .healup-sidebar-item {
+        background-color: rgba(30, 41, 55, 0.6);
+        color: #cbd5e1;
+        border: 1px solid rgba(148, 163, 184, 0.06);
+      }
+      body.theme-dark .healup-sidebar-item .healup-sidebar-icon { color: #94a3b8; }
+      body.theme-dark .healup-sidebar-item:hover {
+        background-color: rgba(30, 41, 55, 0.95);
+        color: #f1f5f9;
+        border-color: rgba(74, 222, 128, 0.18);
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.4);
+      }
+      body.theme-dark .healup-sidebar-item:hover .healup-sidebar-icon { color: #86efac; }
+      body.theme-dark .healup-sidebar-item-active {
+        background-color: rgba(74, 222, 128, 0.10) !important;
+        color: #f1f5f9 !important;
+        font-weight: 600;
+        border-color: rgba(74, 222, 128, 0.30);
+        box-shadow: 0 6px 22px rgba(2, 6, 23, 0.5), 0 0 0 1px rgba(74, 222, 128, 0.18) inset;
+      }
+      body.theme-dark .healup-sidebar-item-active .healup-sidebar-icon { color: #4ade80; }
+      body.theme-dark .healup-sidebar-active-bar {
+        background: linear-gradient(180deg, #4ade80, #22c55e);
+        box-shadow: 0 0 12px rgba(74, 222, 128, 0.55);
+      }
+
+      body.theme-dark .healup-sidebar-profile { background-color: rgba(30, 41, 55, 0.55); }
+      body.theme-dark .healup-sidebar-profile:hover {
+        background-color: rgba(30, 41, 55, 0.95);
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.4), 0 0 0 1px rgba(74, 222, 128, 0.18) inset;
+      }
+      body.theme-dark .healup-sidebar-avatar {
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        color: #052e16;
+        box-shadow: 0 4px 18px rgba(74, 222, 128, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+      body.theme-dark .healup-sidebar-profile-name { color: #f1f5f9 !important; }
+      body.theme-dark .healup-sidebar-profile-meta { color: #94a3b8 !important; }
+      body.theme-dark .healup-sidebar-profile-chevron { color: #94a3b8; }
+      body.theme-dark .healup-sidebar-profile:hover .healup-sidebar-profile-chevron { color: #4ade80; }
       @keyframes healupFadeUp {
         from {
           opacity: 0;
@@ -191,88 +361,209 @@
           -ms-overflow-style: none;
           scrollbar-width: none;
       }
+      /* ─── Dark mode: solid deep charcoal navy, no decorative gradients ─── */
       body.theme-dark {
-        background-color: #1f2720;
-        color: #eef2eb;
-        background-image:
-          radial-gradient(circle at top left, rgba(126, 169, 107, 0.16), transparent 28%),
-          radial-gradient(circle at bottom right, rgba(180, 150, 106, 0.12), transparent 26%);
+        background-color: #0f172a;
+        color: #f1f5f9;
+        background-image: none;
       }
+      /* Soft-glow headings */
       body.theme-dark h1,
       body.theme-dark h2,
-      body.theme-dark h3,
+      body.theme-dark h3 {
+        color: #f1f5f9;
+        text-shadow: 0 0 28px rgba(74, 222, 128, 0.16);
+      }
       body.theme-dark h4,
       body.theme-dark h5,
       body.theme-dark h6 {
-        color: #f3f7f1;
+        color: #e2e8f0;
+        text-shadow: 0 0 16px rgba(74, 222, 128, 0.10);
       }
+
+      /* Surfaces: cards distinctly LIGHTER than body so they layer cleanly */
       body.theme-dark [class*="bg-white"] {
-        background-color: rgba(26, 38, 33, 0.92) !important;
+        background-color: #1e293b !important;
       }
       body.theme-dark [class*="bg-gray-50"] {
-        background-color: rgba(32, 46, 40, 0.86) !important;
+        background-color: rgba(30, 41, 59, 0.65) !important;
       }
       body.theme-dark [class*="bg-gray-100"] {
-        background-color: rgba(43, 59, 51, 0.92) !important;
+        background-color: rgba(51, 65, 85, 0.85) !important;
+      }
+      body.theme-dark [class*="bg-gray-200"] {
+        background-color: rgba(71, 85, 105, 0.7) !important;
       }
       body.theme-dark [class*="bg-matcha-50"] {
-        background-color: rgba(35, 50, 42, 0.9) !important;
+        background-color: rgba(74, 222, 128, 0.10) !important;
       }
+      body.theme-dark [class*="bg-matcha-100"] {
+        background-color: rgba(74, 222, 128, 0.16) !important;
+      }
+      /* Catch other light status backgrounds (used in event/expert/discover badges) */
+      body.theme-dark [class*="bg-amber-50"],
+      body.theme-dark [class*="bg-yellow-50"] {
+        background-color: rgba(251, 191, 36, 0.10) !important;
+      }
+      body.theme-dark [class*="bg-amber-100"] {
+        background-color: rgba(251, 191, 36, 0.16) !important;
+      }
+      body.theme-dark [class*="bg-red-50"],
+      body.theme-dark [class*="bg-rose-50"] {
+        background-color: rgba(248, 113, 113, 0.10) !important;
+      }
+      body.theme-dark [class*="bg-blue-50"] {
+        background-color: rgba(94, 234, 212, 0.10) !important;
+      }
+      body.theme-dark [class*="bg-green-50"] {
+        background-color: rgba(74, 222, 128, 0.10) !important;
+      }
+      /* Catch all the hardcoded warm-cream hex backgrounds the app uses */
+      body.theme-dark [class*="bg-[#fffdf9"],
+      body.theme-dark [class*="bg-[#fdfaf4"],
+      body.theme-dark [class*="bg-[#fbf8f1"],
+      body.theme-dark [class*="bg-[#f5f0e6"],
+      body.theme-dark [class*="bg-[#eef3e8"],
+      body.theme-dark [class*="bg-[#efe6d6"],
+      body.theme-dark [class*="bg-[#efe4d1"],
+      body.theme-dark [class*="bg-[#edf2e8"],
+      body.theme-dark [class*="bg-[#f6efe3"] {
+        background-color: rgba(30, 41, 59, 0.78) !important;
+        background-image: none !important;
+      }
+
+      /* Gradients with white stops */
       body.theme-dark [class*="from-white"],
       body.theme-dark [class*="via-white"],
       body.theme-dark [class*="to-white"] {
-        --tw-gradient-from: rgba(26, 38, 33, 0.96) var(--tw-gradient-from-position) !important;
-        --tw-gradient-to: rgba(26, 38, 33, 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-from: #1e293b var(--tw-gradient-from-position) !important;
+        --tw-gradient-to: rgba(15, 23, 42, 0) var(--tw-gradient-to-position) !important;
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to) !important;
       }
-      body.theme-dark [class*="text-gray-900"] { color: #f3f7f1 !important; }
-      body.theme-dark [class*="text-gray-800"] { color: #e2ebe2 !important; }
-      body.theme-dark [class*="text-gray-700"] { color: #d1ded1 !important; }
-      body.theme-dark [class*="text-gray-600"] { color: #bdd0bd !important; }
-      body.theme-dark [class*="text-gray-500"] { color: #aabfaa !important; }
-      body.theme-dark [class*="text-gray-400"] { color: #8aa08a !important; }
+
+      /* Text hierarchy: off-white primary, slate muted */
+      body.theme-dark [class*="text-gray-900"] { color: #f1f5f9 !important; }
+      body.theme-dark [class*="text-gray-800"] { color: #e2e8f0 !important; }
+      body.theme-dark [class*="text-gray-700"] { color: #cbd5e1 !important; }
+      body.theme-dark [class*="text-gray-600"] { color: #94a3b8 !important; }
+      body.theme-dark [class*="text-gray-500"] { color: #7a8aa0 !important; }
+      body.theme-dark [class*="text-gray-400"] { color: #5b6b82 !important; }
+      /* Sage accents brighten so they stay visible on navy */
+      body.theme-dark [class*="text-matcha-600"] { color: #86efac !important; }
+      body.theme-dark [class*="text-matcha-700"] { color: #4ade80 !important; }
+      body.theme-dark [class*="text-matcha-800"] { color: #bbf7d0 !important; }
+      body.theme-dark [class*="text-matcha-900"] { color: #dcfce7 !important; }
+
+      /* Borders: subtle slate, almost invisible */
+      body.theme-dark [class*="border-gray-50"],
       body.theme-dark [class*="border-gray-100"],
       body.theme-dark [class*="border-gray-200"],
       body.theme-dark [class*="border-matcha-50"],
       body.theme-dark [class*="border-matcha-100"] {
-        border-color: rgba(189, 208, 189, 0.18) !important;
+        border-color: rgba(148, 163, 184, 0.14) !important;
       }
-      body.theme-dark [class*="shadow-sm"],
-      body.theme-dark [class*="shadow-md"],
+      body.theme-dark [class*="border-matcha-200"],
+      body.theme-dark [class*="border-matcha-300"] {
+        border-color: rgba(74, 222, 128, 0.30) !important;
+      }
+
+      /* Shadows: deep ambient + faint sage glow for that "premium dark" feel */
+      body.theme-dark [class*="shadow-sm"] {
+        box-shadow: 0 4px 14px rgba(2, 6, 23, 0.45) !important;
+      }
+      body.theme-dark [class*="shadow-md"] {
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.5) !important;
+      }
       body.theme-dark [class*="shadow-lg"] {
-        box-shadow: 0 18px 40px rgba(2, 8, 23, 0.32) !important;
+        box-shadow: 0 18px 42px rgba(2, 6, 23, 0.55), 0 0 0 1px rgba(74, 222, 128, 0.06) !important;
       }
+      body.theme-dark [class*="shadow-xl"] {
+        box-shadow: 0 24px 50px rgba(2, 6, 23, 0.6), 0 0 0 1px rgba(74, 222, 128, 0.08) !important;
+      }
+
+      /* Cards: opaque slate with subtle inner highlight + ambient outer glow */
       body.theme-dark .healup-card,
       body.theme-dark .healup-card-soft {
-        background: linear-gradient(180deg, rgba(30, 39, 31, 0.92) 0%, rgba(41, 54, 42, 0.88) 100%) !important;
-        border-color: rgba(189, 208, 189, 0.16) !important;
-        box-shadow: 0 18px 40px rgba(2, 8, 23, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+        background: linear-gradient(180deg, #1e293b 0%, #1a2336 100%) !important;
+        border: 1px solid rgba(148, 163, 184, 0.12) !important;
+        box-shadow:
+          0 18px 40px rgba(2, 6, 23, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.04),
+          0 0 0 1px rgba(74, 222, 128, 0.04) !important;
+        backdrop-filter: blur(14px);
       }
-      body.theme-dark .healup-parallax-orb {
-        background: radial-gradient(circle at 30% 30%, rgba(85, 107, 74, 0.28), rgba(61, 75, 62, 0.14) 55%, rgba(17, 24, 19, 0.05) 100%);
+
+      /* Divider: sage → lavender shimmer for soft accent */
+      body.theme-dark .healup-divider {
+        background: linear-gradient(90deg,
+          rgba(74, 222, 128, 0),
+          rgba(74, 222, 128, 0.40),
+          rgba(196, 181, 253, 0.32),
+          rgba(94, 234, 212, 0.28),
+          rgba(74, 222, 128, 0));
       }
-      body.theme-dark .healup-parallax-leaf {
-        color: rgba(168, 195, 158, 0.22);
+
+      /* Parallax decorations */
+/* Primary button: bright sage with dark navy text (per spec) */
+      body.theme-dark .healup-button {
+        background-image: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+        color: #052e16 !important;
+        box-shadow:
+          0 10px 28px rgba(74, 222, 128, 0.30),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
       }
+      body.theme-dark .healup-button:hover {
+        filter: brightness(1.06) saturate(1.05);
+        box-shadow: 0 14px 34px rgba(74, 222, 128, 0.36) !important;
+      }
+
+      /* Secondary button: dark slate with soft sage border */
       body.theme-dark .healup-button-secondary {
-        background: rgba(31, 39, 32, 0.82);
-        color: #dfe8dc;
-        border-color: rgba(168, 195, 158, 0.28);
+        background: rgba(30, 41, 59, 0.85);
+        color: #cbd5e1;
+        border-color: rgba(74, 222, 128, 0.32);
       }
+      body.theme-dark .healup-button-secondary:hover {
+        background: rgba(51, 65, 85, 0.9);
+        border-color: rgba(74, 222, 128, 0.48);
+      }
+
+      /* Saved toast: bright sage tint on dark */
       body.theme-dark .healup-saved-toast {
-        background: linear-gradient(135deg, rgba(67, 82, 61, 0.94) 0%, rgba(37, 48, 39, 0.96) 100%);
-        color: #dfe8dc;
-        border-color: rgba(194, 169, 128, 0.24);
+        background: linear-gradient(135deg, rgba(74, 222, 128, 0.20) 0%, rgba(30, 41, 59, 0.94) 100%);
+        color: #bbf7d0;
+        border-color: rgba(74, 222, 128, 0.34);
       }
+
+      /* Inputs: pure deep navy, off-white text */
       body.theme-dark input,
       body.theme-dark textarea,
       body.theme-dark select {
-        background-color: rgba(22, 33, 28, 0.9) !important;
-        color: #edf5ed !important;
-        border-color: rgba(189, 208, 189, 0.22) !important;
+        background-color: #0f172a !important;
+        color: #f1f5f9 !important;
+        border-color: rgba(148, 163, 184, 0.22) !important;
       }
       body.theme-dark ::placeholder {
-        color: #8aa08a;
+        color: #64748b;
+      }
+
+      /* Focus ring: bright sage on deep navy — high contrast */
+      body.theme-dark .healup-focus:focus-visible,
+      body.theme-dark button:focus-visible,
+      body.theme-dark input:focus-visible,
+      body.theme-dark textarea:focus-visible,
+      body.theme-dark select:focus-visible {
+        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.95), 0 0 0 6px rgba(74, 222, 128, 0.55) !important;
+        border-color: rgba(74, 222, 128, 0.70) !important;
+      }
+
+      /* Bright matcha accents stay readable against dark (e.g. selected calendar day) */
+      body.theme-dark [class*="bg-matcha-500"] {
+        background-color: #4ade80 !important;
+        color: #052e16 !important;
+      }
+      body.theme-dark [class*="bg-matcha-600"] {
+        background-color: #22c55e !important;
       }
       body.reduce-motion *,
       body.reduce-motion *::before,
@@ -288,9 +579,6 @@
       body.reduce-motion .healup-leaf-wiggle {
         animation: none !important;
       }
-      body.reduce-motion .healup-parallax-layer {
-        transform: none !important;
-      }
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -305,9 +593,6 @@
         }
         .healup-leaf-wiggle {
           animation: none !important;
-        }
-        .healup-parallax-layer {
-          transform: none !important;
         }
       }
     </style>
