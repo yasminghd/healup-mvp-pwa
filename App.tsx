@@ -22,6 +22,7 @@ import { AppView, DailyRecord, UserProfile, LabResult, Friend } from './types';
 import { getDefaultEnabledView, getSafeView, isViewEnabled } from './config/features';
 import { HeartHandshake, Leaf } from 'lucide-react';
 import { t } from './translations';
+import { checkCardinalConfig } from './services/cardinal';
 
 const THEME_STORAGE_KEY = 'healup-theme-mode';
 const TEXT_SIZE_STORAGE_KEY = 'healup-text-size';
@@ -36,6 +37,7 @@ const INITIAL_LAB_DATA: LabResult[] = [];
 const INITIAL_FRIENDS: Friend[] = [];
 
 const App: React.FC = () => {
+  checkCardinalConfig();
   const [currentView, setCurrentView] = useState<AppView>(() => getDefaultEnabledView());
   const [data, setData] = useState<DailyRecord[]>(INITIAL_DATA);
   const [labData, setLabData] = useState<LabResult[]>(INITIAL_LAB_DATA);
