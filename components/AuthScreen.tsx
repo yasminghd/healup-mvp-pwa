@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Leaf, Mail, KeyRound, ArrowLeft, Loader2 } from 'lucide-react';
+import { Mail, KeyRound, ArrowLeft, Loader2 } from 'lucide-react';
 import {
   startEmailSignup,
   startEmailLogin,
@@ -96,7 +96,26 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-matcha-100 mb-4">
-              <Leaf className="text-matcha-700" size={32} />
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 34 34"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="HealUp logo"
+              >
+                <path
+                  d="M10 4C10 2.34315 11.3431 1 13 1H21C22.6569 1 24 2.34315 24 4V10H30C31.6569 10 33 11.3431 33 13V21C33 22.6569 31.6569 24 30 24H24V30C24 31.6569 22.6569 33 21 33H13C11.3431 33 10 31.6569 10 30V24H4C2.34315 24 1 22.6569 1 21V13C1 11.3431 2.34315 10 4 10H10V4Z"
+                  fill="#7ea96b"
+                />
+                <path
+                  d="M12 22L24 10M24 10H16M24 10V18"
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </div>
             <h1 className="text-3xl font-semibold text-matcha-900 mb-2">
               Welcome to HealUp
