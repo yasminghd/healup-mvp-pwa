@@ -22,7 +22,8 @@ import { AppView, DailyRecord, UserProfile, LabResult, Friend } from './types';
 import { getDefaultEnabledView, getSafeView, isViewEnabled } from './config/features';
 import { HeartHandshake, Leaf } from 'lucide-react';
 import { t } from './translations';
-import { checkCardinalConfig } from './services/cardinal';
+import { checkCardinalConfig, isLoggedIn, logout } from './services/cardinal';
+import AuthScreen from './components/AuthScreen';
 
 const THEME_STORAGE_KEY = 'healup-theme-mode';
 const TEXT_SIZE_STORAGE_KEY = 'healup-text-size';
@@ -37,9 +38,14 @@ const INITIAL_LAB_DATA: LabResult[] = [];
 const INITIAL_FRIENDS: Friend[] = [];
 
 const App: React.FC = () => {
-  checkCardinalConfig();
-  const [currentView, setCurrentView] = useState<AppView>(() => getDefaultEnabledView());
-  const [data, setData] = useState<DailyRecord[]>(INITIAL_DATA);
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    checkCardinalConfig();
+    setAuthed(isLoggedIn());
+  }, []);
+
+  const [currentView, setCurrentView] = useState<AppView>(() => getDefaultEnabledView());  const [data, setData] = useState<DailyRecord[]>(INITIAL_DATA);
   const [labData, setLabData] = useState<LabResult[]>(INITIAL_LAB_DATA);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -181,6 +187,10 @@ const App: React.FC = () => {
         return <Dashboard data={data} language={language} />;
     }
   };
+
+  if (!authed) {
+    return <AuthScreen onAuthSuccess={() => setAuthed(true)} />;
+  }
 
   return (
     <div className="min-h-screen flex">
