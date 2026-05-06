@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, KeyRound, ArrowLeft, Loader2 } from 'lucide-react';
 import {
-  startEmailSignup,
-  startEmailLogin,
-  completeEmailSignup,
+  signupOrLoginWithEmail,
+  verifyEmailCode,
 } from '../services/cardinal';
 
 type Mode = 'choose' | 'enterEmail' | 'enterCode';
@@ -39,11 +38,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
     setError(null);
     setIsLoading(true);
     try {
-      if (intent === 'signup') {
-        await startEmailSignup(email.trim());
-      } else {
-        await startEmailLogin(email.trim());
-      }
+      await signupOrLoginWithEmail(email.trim());
       setMode('enterCode');
     } catch (err) {
       console.error('Send code failed:', err);
@@ -68,7 +63,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
     setError(null);
     setIsLoading(true);
     try {
-      await completeEmailSignup(code.trim());
+      await verifyEmailCode(code.trim());
       onAuthSuccess();
     } catch (err) {
       console.error('Verification failed:', err);

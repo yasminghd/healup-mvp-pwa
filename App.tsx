@@ -22,7 +22,7 @@ import { AppView, DailyRecord, UserProfile, LabResult, Friend } from './types';
 import { getDefaultEnabledView, getSafeView, isViewEnabled } from './config/features';
 import { HeartHandshake, Leaf } from 'lucide-react';
 import { t } from './translations';
-import { checkCardinalConfig, isLoggedIn, logout } from './services/cardinal';
+import { checkCardinalConfig, tryRestoreSession } from './services/cardinal';
 import AuthScreen from './components/AuthScreen';
 
 const THEME_STORAGE_KEY = 'healup-theme-mode';
@@ -40,9 +40,21 @@ const INITIAL_FRIENDS: Friend[] = [];
 const App: React.FC = () => {
   const [authed, setAuthed] = useState(false);
 
+  const [authChecking, setAuthChecking] = useState(true);
+
   useEffect(() => {
     checkCardinalConfig();
-    setAuthed(isLoggedIn());
+    tryRestoreSession()
+      .then((sdk) => {
+        setAuthed(sdk !== null);
+      })
+      .catch((err) => {
+        console.warn('Session restore failed:', err);
+        setAuthed(false);
+      })
+      .finally(() => {
+        setAuthChecking(false);
+      });
   }, []);
 
   const [currentView, setCurrentView] = useState<AppView>(() => getDefaultEnabledView());  const [data, setData] = useState<DailyRecord[]>(INITIAL_DATA);
@@ -187,6 +199,14 @@ const App: React.FC = () => {
         return <Dashboard data={data} language={language} />;
     }
   };
+
+  if (authChecking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#fbf8f1]">
+        <div className="text-matcha-700 text-sm">Loading…</div>
+      </div>
+    );
+  }
 
   if (!authed) {
     return <AuthScreen onAuthSuccess={() => setAuthed(true)} />;
