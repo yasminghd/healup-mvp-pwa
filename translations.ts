@@ -195,6 +195,7 @@ export const translations: Record<string, Record<string, string>> = {
     // Mobile tab bar
     home: 'Home',
     track: 'Track',
+    journal: 'Journal',
     // Onboarding
     skipOnboarding: 'Skip onboarding',
     stepLabel: 'Step',
@@ -561,6 +562,7 @@ export const translations: Record<string, Record<string, string>> = {
     // Mobile tab bar
     home: 'Accueil',
     track: 'Suivi',
+    journal: 'Journal',
     // Onboarding
     skipOnboarding: 'Passer l\'introduction',
     stepLabel: 'Étape',
@@ -926,6 +928,7 @@ export const translations: Record<string, Record<string, string>> = {
     // Mobile tab bar
     home: 'Start',
     track: 'Verfolgen',
+    journal: 'Tagebuch',
     // Onboarding
     skipOnboarding: 'Einführung überspringen',
     stepLabel: 'Schritt',
@@ -1291,6 +1294,7 @@ export const translations: Record<string, Record<string, string>> = {
     // Mobile tab bar
     home: 'Home',
     track: 'Traccia',
+    journal: 'Diario',
     // Onboarding
     skipOnboarding: 'Salta introduzione',
     stepLabel: 'Passo',
@@ -1656,6 +1660,7 @@ export const translations: Record<string, Record<string, string>> = {
     // Mobile tab bar
     home: 'Chasa',
     track: 'Suandar',
+    journal: 'Diari',
     // Onboarding
     skipOnboarding: 'Sursiglir l\'introducziun',
     stepLabel: 'Pass',

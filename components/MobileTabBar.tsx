@@ -18,9 +18,9 @@ type TabItem = {
 
 const tabItems: TabItem[] = [
   { id: AppView.DASHBOARD, labelKey: 'home', icon: House },
-  { id: AppView.TRACKER, labelKey: 'track', icon: NotebookPen },
+  { id: AppView.TRACKER, labelKey: 'journal', icon: NotebookPen },
   { id: AppView.INSIGHTS, labelKey: 'insights', icon: BrainCircuit },
-  { id: AppView.PAIN_PULSE, labelKey: 'community', icon: Heart },
+  { id: AppView.PAIN_PULSE, labelKey: 'connect', icon: Heart },
   { id: AppView.PROFILE, labelKey: 'profile', icon: UserRound },
 ];
 

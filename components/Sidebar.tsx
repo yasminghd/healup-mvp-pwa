@@ -8,10 +8,10 @@ import {
   X,
   Settings,
   ChevronRight,
-  Bell,
 } from 'lucide-react';
 import { t } from '../translations';
 import { isViewEnabled } from '../config/features';
+import NotificationBell from './NotificationBell';
 
 interface SidebarProps {
   currentView: AppView;
@@ -144,10 +144,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <HealUpLogo className="scale-90 origin-center" />
 
-        <button className="healup-sidebar-mobile-toggle relative p-2" aria-label="Notifications">
-          <Bell size={20} />
-          <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-matcha-500"></span>
-        </button>
+        <NotificationBell iconSize={20} align="right" />
+
       </div>
 
       {/* Sidebar */}

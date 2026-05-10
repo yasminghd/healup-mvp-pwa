@@ -1,13 +1,13 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserProfile } from '../types';
-import { 
-  Bell, 
-  Shield, 
-  Globe, 
-  Moon, 
-  Type, 
-  HelpCircle, 
+import {
+  Bell,
+  Shield,
+  Globe,
+  Moon,
+  Type,
+  HelpCircle,
   LogOut,
   ChevronRight,
   Eye,
@@ -15,14 +15,68 @@ import {
   User
 } from 'lucide-react';
 import { t } from '../translations';
+import { logout } from '../services/cardinal';
+import {
+  fireTestNotification,
+  getBrowserPermission,
+  getReminderSettings,
+  requestBrowserPermission,
+  setReminderSettings,
+} from '../services/notifications';
 
 interface SettingsProps {
   userProfile: UserProfile;
   onUpdateProfile: (profile: UserProfile) => void;
+  onLogout: () => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile }) => {
+const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile, onLogout }) => {
   const language = userProfile.language || 'English';
+
+  const [reminder, setReminder] = useState(() => getReminderSettings());
+  const [browserPerm, setBrowserPerm] = useState<NotificationPermission | 'unsupported'>(
+    () => getBrowserPermission()
+  );
+
+  useEffect(() => {
+    const refresh = () => setBrowserPerm(getBrowserPermission());
+    window.addEventListener('focus', refresh);
+    return () => window.removeEventListener('focus', refresh);
+  }, []);
+
+  const updateReminder = (next: Partial<ReturnType<typeof getReminderSettings>>) => {
+    const merged = { ...reminder, ...next };
+    setReminder(merged);
+    setReminderSettings(next);
+  };
+
+  const handleToggleReminder = () => {
+    updateReminder({ enabled: !reminder.enabled });
+  };
+
+  const handleToggleSystem = async () => {
+    if (!reminder.showAsSystem) {
+      const result = await requestBrowserPermission();
+      setBrowserPerm(result);
+      if (result !== 'granted') return;
+      updateReminder({ showAsSystem: true });
+    } else {
+      updateReminder({ showAsSystem: false });
+    }
+  };
+
+  const systemDescription =
+    browserPerm === 'unsupported'
+      ? 'This browser does not support system notifications.'
+      : browserPerm === 'denied'
+        ? 'Blocked in your browser settings. Re-allow notifications for this site to enable.'
+        : 'Also pop up reminders as system notifications when the tab is open.';
+
+  const handleLogout = async () => {
+    if (!confirm('Are you sure you want to sign out?')) return;
+    await logout();
+    onLogout();
+  };
 
   const updatePrivacy = (key: keyof typeof userProfile.privacySettings) => {
     onUpdateProfile({
@@ -152,17 +206,56 @@ const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile }) => 
       <Section title={t('notifications', language)} icon={Bell}>
         <ToggleRow
           label={t('dailyCheck', language)}
-          description={t('dailyCheckDesc', language)}
-          checked={true}
-          onChange={() => {}}
+          description={`Send a daily reminder to log your symptoms${reminder.enabled ? ` at ${reminder.time}.` : '.'}`}
+          checked={reminder.enabled}
+          onChange={handleToggleReminder}
         />
+
+        {reminder.enabled && (
+          <div className="flex items-center justify-between py-1 pl-1">
+            <div>
+              <p className="text-sm font-medium text-gray-900">Reminder time</p>
+              <p className="text-xs text-gray-500">When to send the daily check-in.</p>
+            </div>
+            <input
+              type="time"
+              value={reminder.time}
+              onChange={(e) => updateReminder({ time: e.target.value })}
+              className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-matcha-500 focus:border-matcha-500 p-2.5 outline-none"
+            />
+          </div>
+        )}
+
         <div className="h-px bg-gray-100 my-1"></div>
+
         <ToggleRow
-          label={t('commActivity', language)}
-          description={t('commActivityDesc', language)}
-          checked={true}
-          onChange={() => {}}
+          label="System notifications"
+          description={systemDescription}
+          checked={reminder.showAsSystem && browserPerm === 'granted'}
+          onChange={handleToggleSystem}
         />
+
+        <div className="h-px bg-gray-100 my-1"></div>
+
+        <div className="flex items-center justify-between py-1">
+          <div>
+            <p className="text-sm font-medium text-gray-900">Send a test notification</p>
+            <p className="text-xs text-gray-500">
+              Confirms your inbox{reminder.showAsSystem && browserPerm === 'granted' ? ' and system notifications' : ''} are working.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => fireTestNotification()}
+            className="rounded-xl border border-matcha-200 bg-white px-3 py-2 text-sm font-semibold text-matcha-800 hover:bg-matcha-50"
+          >
+            Send test
+          </button>
+        </div>
+
+        <p className="mt-3 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
+          Reminders fire only while HealUp is open in a browser tab. Closed-tab notifications need a server-side push setup, which isn't connected yet.
+        </p>
       </Section>
 
       {/* Appearance */}
@@ -230,7 +323,7 @@ const Settings: React.FC<SettingsProps> = ({ userProfile, onUpdateProfile }) => 
       </Section>
 
       <div className="mt-8 pt-4 border-t border-gray-200">
-        <button className="flex items-center gap-2 text-red-600 font-medium hover:bg-red-50 px-4 py-3 rounded-xl transition-colors w-full justify-center">
+        <button onClick={handleLogout} className="flex items-center gap-2 text-red-600 font-medium hover:bg-red-50 px-4 py-3 rounded-xl transition-colors w-full justify-center">
           <LogOut size={18} /> {t('signOut', language)}
         </button>
         <p className="text-center text-xs text-gray-400 mt-4">HealUp v1.0.4 (Beta)</p>

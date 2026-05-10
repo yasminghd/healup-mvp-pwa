@@ -170,9 +170,10 @@ class HealUpCryptoStrategies extends CryptoStrategies {
     aggregate: { [dataOwnerId: string]: { [pub: SpkiHexString]: XRsaKeypair } },
   ): Promise<void> {
     for (const rk of recoveryKeys) {
+      const cleaned = rk.replace(/[-\s]/g, '');
       let decoded: RecoveryDataKey | undefined;
       try {
-        decoded = RecoveryDataKey.fromBase32(rk);
+        decoded = RecoveryDataKey.fromBase32(cleaned);
       } catch (e) {
         console.warn('Invalid recovery key, skipping:', e);
         continue;

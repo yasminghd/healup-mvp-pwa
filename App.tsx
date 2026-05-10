@@ -15,15 +15,17 @@ import Groups from './components/Groups';
 import Discover from './components/Discover';
 import Research from './components/Research';
 import Settings from './components/Settings';
-import PainPulse from './components/PainPulse';
+import HealUpConnect from './components/HealUpConnect';
 import MobileTabBar from './components/MobileTabBar';
 import OnboardingModal from './components/OnboardingModal';
 import { AppView, DailyRecord, UserProfile, LabResult, Friend } from './types';
 import { getDefaultEnabledView, getSafeView, isViewEnabled } from './config/features';
-import { HeartHandshake, Leaf } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import { t } from './translations';
 import { checkCardinalConfig, tryRestoreSession } from './services/cardinal';
+import { startReminderScheduler } from './services/notifications';
 import AuthScreen from './components/AuthScreen';
+import NotificationBell from './components/NotificationBell';
 
 const THEME_STORAGE_KEY = 'healup-theme-mode';
 const TEXT_SIZE_STORAGE_KEY = 'healup-text-size';
@@ -44,6 +46,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     checkCardinalConfig();
+    startReminderScheduler();
     tryRestoreSession()
       .then((sdk) => {
         setAuthed(sdk !== null);
@@ -178,7 +181,7 @@ const App: React.FC = () => {
       case AppView.INSIGHTS:
         return <Insights data={data} language={language} />;
       case AppView.PAIN_PULSE:
-        return <PainPulse language={language} />;
+        return <HealUpConnect language={language} />;
       case AppView.EXPERTS:
         return <Experts language={language} />;
       case AppView.COMMUNITY:
@@ -192,7 +195,7 @@ const App: React.FC = () => {
       case AppView.RESEARCH:
         return <Research language={language} />;
       case AppView.SETTINGS:
-        return <Settings userProfile={userProfile} onUpdateProfile={setUserProfile} />;
+        return <Settings userProfile={userProfile} onUpdateProfile={setUserProfile} onLogout={() => setAuthed(false)} />;
       case AppView.PROFILE:
         return <Profile userProfile={userProfile} onUpdateProfile={setUserProfile} friends={INITIAL_FRIENDS} />;
       default:
@@ -224,7 +227,10 @@ const App: React.FC = () => {
       
       <main className="relative mt-16 flex-1 overflow-x-hidden p-5 pb-32 lg:mt-0 lg:p-10 lg:pb-14">
         <div className="relative mx-auto max-w-6xl space-y-10">
-          <div className="mb-2 flex justify-end">
+          <div className="mb-2 flex items-center justify-end gap-2">
+            <div className="hidden lg:block">
+              <NotificationBell iconSize={18} align="right" />
+            </div>
             <button
               type="button"
               onClick={() => setUserProfile((prev) => ({ ...prev, restMode: !prev.restMode }))}
@@ -254,13 +260,6 @@ const App: React.FC = () => {
                 >
                   {t('settings', language)}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => handleViewChange(AppView.RESEARCH)}
-                  className="min-h-[44px] rounded-2xl border border-matcha-100 bg-[#fffdf9] px-4 py-2 text-sm font-semibold text-matcha-800 transition-colors hover:bg-matcha-50"
-                >
-                  {t('research', language)}
-                </button>
                 <a
                   href="mailto:admin@healup-health.com?subject=HealUp%20Support"
                   className="inline-flex min-h-[44px] items-center rounded-2xl border border-matcha-100 bg-[#fffdf9] px-4 py-2 text-sm font-semibold text-matcha-800 transition-colors hover:bg-matcha-50"
@@ -272,15 +271,6 @@ const App: React.FC = () => {
           </footer>
         </div>
       </main>
-
-      <button
-        type="button"
-        onClick={() => handleViewChange(AppView.PAIN_PULSE)}
-        className="fixed bottom-28 right-4 z-50 flex min-h-[56px] items-center gap-2 rounded-full border border-matcha-100 bg-[#fbf8f1]/94 px-4 py-3 text-sm font-semibold text-matcha-800 shadow-sm backdrop-blur-md transition-colors hover:bg-matcha-50 lg:bottom-6 lg:right-6"
-      >
-        <HeartHandshake size={18} className="text-matcha-700" />
-        <span>{t('sos', language)}</span>
-      </button>
 
       <MobileTabBar currentView={currentView} onSelect={handleViewChange} language={language} />
       {showOnboarding && (

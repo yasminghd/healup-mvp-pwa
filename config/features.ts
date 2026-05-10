@@ -259,12 +259,12 @@ export const featureRegistry: FeatureDefinition[] = [
   {
     id: 'research-center',
     name: 'Research Center',
-    navLabel: 'Research & News',
-    routeOrComponent: 'AppView.RESEARCH -> components/Research.tsx',
+    navLabel: null,
+    routeOrComponent: 'components/Research.tsx (embedded inside components/HealUpConnect.tsx)',
     status: 'mvp-active',
     isMvp: true,
     state: 'visible',
-    note: 'Research page includes journals, news, trials, and recruitment tabs and is restored in HealUp Connect.',
+    note: 'Research page (journals, news, trials, recruitment) is now a section inside HealUp Connect, reachable via the Pulse / Research toggle. No longer linked from the app footer.',
     appView: AppView.RESEARCH,
   },
   {

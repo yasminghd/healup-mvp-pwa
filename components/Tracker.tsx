@@ -28,6 +28,11 @@ const makeId = (prefix: string, label: string) => `${prefix}-${label.toLowerCase
 const formatMetricMax = (max: number, unit?: string) => `Max ${max}${unit ? ` ${unit}` : ''}`;
 const keepCustomOnly = <T extends { source: 'suggested' | 'custom' }>(items: T[] = []) => items.filter((item) => item.source === 'custom');
 
+const getTodayKey = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
 const fromRecordSymptoms = (record?: DailyRecord) => {
   if (!record) return [] as TrackedSymptomDefinition[];
   if (record.trackedSymptoms?.length) return keepCustomOnly(record.trackedSymptoms);
@@ -64,8 +69,10 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
     return customStored.length ? customStored : fromRecordMetrics(latestManaged);
   }, [latestManaged]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const todayKey = useMemo(() => getTodayKey(), []);
+  const [selectedDate, setSelectedDate] = useState(() => getTodayKey());
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const isFutureSelected = selectedDate > todayKey;
   const [trackedSymptoms, setTrackedSymptoms] = useState(defaultSymptoms);
   const [trackedMetrics, setTrackedMetrics] = useState(defaultMetrics);
   const [form, setForm] = useState<FormState>({ notes: '', symptomEntries: normalizeSymptoms(defaultSymptoms), quantifiableEntries: normalizeMetrics(defaultMetrics) });
@@ -146,9 +153,10 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
 
   useEffect(() => {
     if (!autosaveReadyRef.current) return;
+    if (isFutureSelected) return;
     const timer = window.setTimeout(() => persist(), 900);
     return () => window.clearTimeout(timer);
-  }, [form, trackedSymptoms, trackedMetrics, selectedDate]);
+  }, [form, trackedSymptoms, trackedMetrics, selectedDate, isFutureSelected]);
 
   const updateSymptom = (id: string, severity: number) => setForm((current) => ({ ...current, symptomEntries: current.symptomEntries.map((entry) => entry.id === id ? { ...entry, severity } : entry) }));
   const updateMetric = (id: string, value: number) => setForm((current) => ({ ...current, quantifiableEntries: current.quantifiableEntries.map((entry) => entry.id === id ? { ...entry, value: Math.min(value, entry.max) } : entry) }));
@@ -232,7 +240,8 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
               const date = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
               const selected = selectedDate === date;
               const recorded = existingData.some((entry) => entry.date === date);
-              return <button key={day} onClick={() => setSelectedDate(date)} className={`relative flex h-10 flex-col items-center justify-center rounded-lg text-sm ${selected ? 'bg-matcha-600 text-white shadow-md shadow-matcha-200' : 'bg-gray-50/50 text-gray-700 hover:bg-matcha-50'}`}><span className="font-medium">{day}</span>{recorded && <span className={`mt-0.5 h-1.5 w-1.5 rounded-full ${selected ? 'bg-white' : 'bg-matcha-500'}`} />}</button>;
+              const isFuture = date > todayKey;
+              return <button key={day} type="button" onClick={() => { if (!isFuture) setSelectedDate(date); }} disabled={isFuture} aria-disabled={isFuture} title={isFuture ? "You can log symptoms for today and earlier days only." : undefined} className={`relative flex h-10 flex-col items-center justify-center rounded-lg text-sm ${isFuture ? 'cursor-not-allowed bg-gray-50/30 text-gray-300' : selected ? 'bg-matcha-600 text-white shadow-md shadow-matcha-200' : 'bg-gray-50/50 text-gray-700 hover:bg-matcha-50'}`}><span className="font-medium">{day}</span>{recorded && <span className={`mt-0.5 h-1.5 w-1.5 rounded-full ${selected ? 'bg-white' : 'bg-matcha-500'}`} />}</button>;
             })}
           </div>
           <div className="mt-6 border-t border-gray-100 pt-4"><div className="mb-2 flex items-center gap-2 text-xs text-gray-500"><div className="h-2 w-2 rounded-full bg-matcha-500" /> Recorded Entry</div></div>
@@ -247,7 +256,7 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
             <div className="healup-card-soft mb-8 rounded-[26px] p-5"><p className="text-sm font-medium text-matcha-800">{t('trackerEncouragement', language)}</p><p className="mt-1 text-sm text-gray-500">{t('trackerAutosaveNote', language)}</p></div>
             <VoiceNoteButton language={language} onTranscript={(text) => setForm((current) => ({ ...current, notes: current.notes ? `${current.notes} ${text}` : text }))} />
             {restMode && <div className="healup-card mb-8 rounded-[26px] p-5"><p className="text-sm font-semibold text-matcha-800">Rest mode keeps this lighter.</p><p className="mt-1 text-sm leading-6 text-gray-500">You can still manage what appears here, but the main logging surfaces stay simple.</p></div>}
-            <form onSubmit={(e) => { e.preventDefault(); persist(); }} className="space-y-10">
+            <form onSubmit={(e) => { e.preventDefault(); if (!isFutureSelected) persist(); }} className="space-y-10">
               <div>
                 <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div><h4 className="mb-2 flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-matcha-800"><AlertCircle size={16} /> Symptoms</h4><p className="text-sm text-gray-500">Track only what matters to you right now. Core symptoms are removable too.</p></div>
@@ -267,7 +276,7 @@ const Tracker: React.FC<TrackerProps> = ({ existingData, onSave, language, restM
                 {!lifestyleManagerOpen && (metricCards.length ? <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">{metricCards.map(({ def, entry }) => { const Icon = getIcon(def.iconKey); return <div key={def.id} className="space-y-3 rounded-[24px] border border-matcha-100 bg-[#fffdf9] p-5"><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-3"><div className="rounded-xl bg-matcha-50 p-2 text-matcha-700"><Icon size={18} /></div><div><div className="flex flex-wrap items-center gap-2"><label className="text-sm font-semibold text-gray-900">{def.label}</label></div><p className="text-sm text-gray-500">{def.helper}</p></div></div><span className="rounded bg-matcha-50 px-2 py-0.5 text-sm font-bold text-matcha-700">{entry.value}</span></div><input type="range" min={0} max={entry.max} value={entry.value} onChange={(e) => updateMetric(def.id, Number(e.target.value))} className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-matcha-600" /><div className="flex justify-between text-xs text-gray-400"><span>0</span><span>{formatMetricMax(entry.max, entry.unit)}</span></div></div>; })}</div> : <div className="healup-card-soft rounded-[28px] p-6"><p className="text-sm font-semibold text-matcha-800">No lifestyle measures selected yet</p><p className="mt-1 text-sm text-gray-500">Open the lifestyle manager and add any quantifiable measures you want to track.</p></div>)}
               </div>
               <div><label className="mb-2 block text-sm font-medium text-gray-700">{t('dailyNotes', language)}</label><textarea className="healup-focus w-full rounded-2xl border border-gray-200 p-4 outline-none transition-all" rows={3} placeholder={t('notesPlaceholder', language)} value={form.notes} onChange={(e) => setForm((current) => ({ ...current, notes: e.target.value }))} /></div>
-              <button type="submit" className="healup-button healup-focus flex w-full items-center justify-center gap-2 rounded-[24px] py-4 font-bold text-white"><Save size={20} /> {t('saveNow', language)}</button>
+              <button type="submit" disabled={isFutureSelected} className="healup-button healup-focus flex w-full items-center justify-center gap-2 rounded-[24px] py-4 font-bold text-white disabled:opacity-50 disabled:cursor-not-allowed"><Save size={20} /> {t('saveNow', language)}</button>
             </form>
           </div>
         </div>
